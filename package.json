@@ -1,0 +1,28 @@
+{
+  "name": "eye_api",
+  "version": "1.0.0",
+  "description": "An example credit card transaction based API.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yagossc/eye_api.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "swagger",
+    "postgresql"
+  ],
+  "author": "yagossc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yagossc/eye_api/issues"
+  },
+  "homepage": "https://github.com/yagossc/eye_api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
