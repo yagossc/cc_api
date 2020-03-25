@@ -12,6 +12,11 @@ module.exports.setup = function(app) {
      *       password:
      *         type: string
      *
+     *   Token:
+     *     properties:
+     *       token:
+     *         type: string
+     *
      *   Transaction:
      *    properties:
      *       nsu:
@@ -24,6 +29,13 @@ module.exports.setup = function(app) {
      *         type: string
      *       horario:
      *         type: string
+     *
+     *   Balance:
+     *    properties:
+     *       disponivel:
+     *         type: number
+     *       receber:
+     *         type: number
      */
 
 
@@ -46,19 +58,30 @@ module.exports.setup = function(app) {
 
     /**
      * @swagger
-     * /users:
-     *   get:
+     * /login:
+     *   post:
      *     description: Returns users
      *     produces:
      *      - application/json
+     *     parameters:
+     *      - name: username
+     *        in: formData
+     *        description: The user's name.
+     *        required: true
+     *        type: string
+     *      - name: password
+     *        in: formData
+     *        description: The user's password.
+     *        required: true
+     *        type: string
      *     responses:
      *       200:
-     *         description: users
+     *         description: An access token.
      *         schema:
      *           type: object
-     *           $ref: '#/definitions/User'
+     *           $ref: '#/definitions/Token'
      */
-    app.get('/users', u.get_all_users);
+    app.post('/login', u.login);
 
     /**
      * @swagger
@@ -100,4 +123,19 @@ module.exports.setup = function(app) {
      */
     app.post('/transaction', t.insert_transaction);
 
+    /**
+     * @swagger
+     * /balance:
+     *   get:
+     *     description: Retrieves available balance.
+     *     produces:
+     *      - application/json
+     *     responses:
+     *       200:
+     *         description: The sum total of balance and future income.
+     *         schema:
+     *           type: object
+     *           $ref: '#/definitions/Balance'
+     */
+    app.get('/balance', t.get_balance);
 }
