@@ -1,28 +1,20 @@
-const { Pool, Client } = require('pg')
-
 const express = require('express');
 const app = express();
-const port = 8080;
 
-const routes = require('./api/routes');
-routes.setup(app);
-
+// Setup doc
 const swaggerapi = require('./swagger');
 swaggerapi(app);
 
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'eyemobile',
-    password: 'postgres',
-    port: 5432,
-})
+// Load the environment config
+const dotenv = require('dotenv');
+dotenv.config()
 
-pool.query('SELECT NOW()', (err, res) => {
-    console.log(err, res)
-    pool.end()
-})
+const server = require('./api/server')
 
-app.listen(port, function(){
-    console.log(`Listening on port ${port}...`);
-});
+// Setup server and get a connection
+const s = server.setup(app);
+const connection = server.start(s, process.env.TAPI_PORT);
+
+// Setup routes
+const routes = require('./api/routes');
+routes.setup(app);
