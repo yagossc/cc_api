@@ -11,8 +11,6 @@ module.exports.setup = function(app) {
      *         type: string
      *       password:
      *         type: string
-     *       email:
-     *         type: string
      *
      *   Transaction:
      *    properties:
@@ -61,6 +59,23 @@ module.exports.setup = function(app) {
      *           $ref: '#/definitions/User'
      */
     app.get('/users', u.get_all_users);
+
+    /**
+     * @swagger
+     * /transaction:
+     *   get:
+     *     description: Retrieves all transactions.
+     *     produces:
+     *      - application/json
+     *     responses:
+     *       200:
+     *         description: All available transactions.
+     *         schema:
+     *           type: array
+     *           items:
+     *             $ref: '#/definitions/Transaction'
+     */
+    app.get('/transaction', t.get_all_transactions);
 
     /**
      * @swagger
