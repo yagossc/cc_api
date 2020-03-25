@@ -15,6 +15,7 @@ module.exports.setup = function(app){
     // Setup and use logger
     logger = require('../internal/logger').setup_logger()
     server.app.use(logger);
+
     return server;
 }
 
