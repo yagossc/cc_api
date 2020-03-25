@@ -1,0 +1,32 @@
+{
+    "dev": {
+        "driver": "pg",
+        "user": "postgres",
+        "password": "postgres",
+        "host": "localhost",
+        "database": "eyemobile",
+        "port": "5432",
+        "schema": "public"
+
+    },
+
+    "test": {
+        "driver": "sqlite3",
+        "filename": ":memory:"
+
+    },
+
+    "pg": {
+        "driver": "pg",
+        "user": "postgres",
+        "password": "postgres",
+        "host": "localhost",
+        "database": "eyemobile",
+        "port": "5432",
+        "schema": "public"
+
+    },
+
+    "sql-file": "true"
+
+}
