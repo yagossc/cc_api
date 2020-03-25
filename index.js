@@ -9,10 +9,18 @@ swaggerapi(app);
 const dotenv = require('dotenv');
 dotenv.config()
 
+// Execute migrations
+const migrations = require('./internal/migrations');
+err = migrations.exec_migrations();
+if (err != null) os.exit(1);
+
+
 const server = require('./api/server')
 
-// Setup server and get a connection
+// Setup server
 const s = server.setup(app);
+
+// Start listening
 const connection = server.start(s, process.env.TAPI_PORT);
 
 // Setup routes
