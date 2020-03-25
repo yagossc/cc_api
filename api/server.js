@@ -4,7 +4,7 @@ var server = {};
 
 module.exports.setup = function(app){
     server.app = app;
-    server.pool = new Pool({
+    server.db = new Pool({
         user:     process.env.DB_USER,
         host:     process.env.DB_HOST,
         databse:  process.env.DB,
