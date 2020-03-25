@@ -11,6 +11,10 @@ module.exports.setup = function(app){
         password: process.env.DB_PASS,
         port:     process.env.DB_PORT,
     });
+
+    // Setup and use logger
+    logger = require('../internal/logger').setup_logger()
+    server.app.use(logger);
     return server;
 }
 
