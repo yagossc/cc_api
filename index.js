@@ -16,7 +16,7 @@ const migrations = require('./internal/migrations');
 err = migrations.exec_migrations();
 if (err != null) os.exit(1);
 
-
+// Server module
 const server = require('./api/server')
 
 // Setup server
