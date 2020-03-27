@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 const logger = require('../internal/logger').setup_logger();
+const notfound = require('../internal/not_found');
 const error_middleware = require('../app/errors');
 const routes = require('./routes');
 
@@ -20,6 +21,9 @@ module.exports.setup = function(app){
 
     // Setup routes
     routes.setup(server.app);
+
+    // Better handle 404
+    server.app.use(notfound.handler);
 
     // Setup error middleware
     server.app.use(error_middleware.handler);
