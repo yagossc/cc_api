@@ -25,10 +25,6 @@ const s = server.setup(app);
 // Start listening
 const connection = server.start(s, process.env.TAPI_PORT);
 
-// Setup routes
-const routes = require('./api/routes');
-routes.setup(app);
-
 // Lock graceful shutdown routine
 const system = require('./internal/system');
 system.graceful_shutdown(connection, s.db);

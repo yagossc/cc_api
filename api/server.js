@@ -1,4 +1,7 @@
-const { Pool } = require('pg')
+const { Pool } = require('pg');
+const logger = require('../internal/logger').setup_logger();
+const error_middleware = require('../app/errors');
+const routes = require('./routes');
 
 var server = {};
 
@@ -13,8 +16,13 @@ module.exports.setup = function(app){
     });
 
     // Setup and use logger
-    logger = require('../internal/logger').setup_logger()
     server.app.use(logger);
+
+    // Setup routes
+    routes.setup(server.app);
+
+    // Setup error middleware
+    server.app.use(error_middleware.handler);
 
     return server;
 }
