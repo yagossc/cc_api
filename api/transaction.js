@@ -1,4 +1,5 @@
 const transaction = require("../app/transaction");
+const valid = require("./valid");
 
 module.exports.insert_transaction = function(req, res, next) {
     incoming = new transaction(req.body);
@@ -8,7 +9,7 @@ module.exports.insert_transaction = function(req, res, next) {
             if (!incoming.data.nsu) {
                 throw new Error("invalid.nsu");
             }
-            if (!incoming.data.valor) {
+            if (!incoming.data.valor || !valid.valor(incoming.data.valor)) {
                 throw new Error("invalid.valor");
             }
             if (!incoming.data.bandeira) {
