@@ -2,11 +2,36 @@ const transaction = require("../app/transaction");
 
 module.exports.insert_transaction = function(req, res, next) {
     incoming = new transaction(req.body);
-    if (incoming.data.nsu == null) {
-        var err = new Error("invalid.nsu");
-        next(err);
-    }
-    // res.json(req.body);
+
+    var validate_input = new Promise( function(resolve, reject){
+        try {
+            if (!incoming.data.nsu) {
+                throw new Error("invalid.nsu");
+            }
+            if (!incoming.data.valor) {
+                throw new Error("invalid.valor");
+            }
+            if (!incoming.data.bandeira) {
+                throw new Error("invalid.bandeira");
+            }
+            if (!incoming.data.modalidade) {
+                throw new Error("invalid.modalidade");
+            }
+            if(!incoming.data.horario){
+                throw new Error("invalid.horario");
+            }
+        }catch(err){
+            reject(err);
+        }
+        resolve();
+    })
+    validate_input.then(
+        function(sucess){
+            res.json(req.body);
+        },
+        function(err){
+            next(err)
+        });
 }
 
 module.exports.get_all_transactions = function(req, res) {
