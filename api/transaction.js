@@ -12,20 +12,21 @@ module.exports.insert_transaction = function(req, res, next) {
             if (!incoming.data.valor || !valid.valor(incoming.data.valor)) {
                 throw new Error("invalid.valor");
             }
-            if (!incoming.data.bandeira) {
+            if (!incoming.data.bandeira || !valid.bandeira(incoming.data.bandeira)) {
                 throw new Error("invalid.bandeira");
             }
-            if (!incoming.data.modalidade) {
+            if (!incoming.data.modalidade || valid.modalidade(incoming.data.modalidade)) {
                 throw new Error("invalid.modalidade");
             }
-            if(!incoming.data.horario){
+            if(!incoming.data.horario || !valid.horario(incoming.data.horario)){
                 throw new Error("invalid.horario");
             }
         }catch(err){
             reject(err);
         }
         resolve();
-    })
+    });
+
     validate_input.then(
         function(sucess){
             res.json(req.body);
