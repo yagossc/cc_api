@@ -9,7 +9,7 @@ swaggerapi(app);
 
 // Load the environment config
 const dotenv = require('dotenv');
-dotenv.config()
+dotenv.config();
 
 // Execute migrations
 const migrations = require('./internal/migrations');
