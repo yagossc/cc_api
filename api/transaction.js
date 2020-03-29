@@ -39,9 +39,10 @@ module.exports.insert_transaction = function(req, res, next) {
         }).
         then(function(inserted){
             console.log("Inserted new transaction:");
-            console.log(inserted.rows);
+            console.log(inserted.rows[0]);
 
-            result = transaction_model.sanitize(inserted.rows);
+            // transfer data to response format
+            result = transaction_store.dto(inserted.rows[0]);
             result.bandeira = result.bandeira == 'v' ? 'VISA':'MASTERCARD';
             result.modalidade = result.modalidade == 'd' ? 'debito':'credito';
             res.json(result);

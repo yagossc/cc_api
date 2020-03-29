@@ -3,7 +3,7 @@ const db = require('./db');
 module.exports.insert = async function(transaction) {
 
     query = `INSERT INTO
-             transactions(transaction_id, transaction_nsu, transaction_value, transaction_cflag, transaction_type, transaction_date)
+             transactions(transaction_id, transaction_nsu, transaction_valor, transaction_bandeira, transaction_modalidade, transaction_horario)
              VALUES ($1, $2, $3, $4, $5, $6)
              returning *`;
 
@@ -15,4 +15,18 @@ module.exports.insert = async function(transaction) {
                     transaction.horario];
 
     return db.query(query, params);
+}
+
+// dto transfers data from an object with
+// fields named from the database's table
+// to one with the api exchangeable fields names
+module.exports.dto = function(data) {
+    dtobj = {};
+    dtobj.nsu =        data.transaction_nsu;
+    dtobj.valor =      data.transaction_valor;
+    dtobj.bandeira =   data.transaction_bandeira;
+    dtobj.modalidade = data.transaction_modalidade;
+    dtobj.horario =    data.transaction_horario;
+
+    return dtobj;
 }
