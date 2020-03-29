@@ -15,7 +15,7 @@ module.exports.insert_transaction = function(req, res, next) {
             if (!incoming.data.bandeira || !valid.bandeira(incoming.data.bandeira)) {
                 throw new Error("invalid.bandeira");
             }
-            if (!incoming.data.modalidade || valid.modalidade(incoming.data.modalidade)) {
+            if (!incoming.data.modalidade || !valid.modalidade(incoming.data.modalidade)) {
                 throw new Error("invalid.modalidade");
             }
             if(!incoming.data.horario || !valid.horario(incoming.data.horario)){

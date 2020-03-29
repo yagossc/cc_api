@@ -6,11 +6,11 @@ module.exports.valor = function(val){
 }
 
 module.exports.bandeira = function(val){
-    return val != 'VISA' && val != 'MASTERCARD';
+    return val == 'VISA' || val == 'MASTERCARD';
 }
 
 module.exports.modalidade = function(val){
-    return val != 'debito' && val != 'credito';
+    return val == 'debito' || val == 'credito';
 }
 
 module.exports.horario = function(val){
