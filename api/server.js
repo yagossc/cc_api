@@ -3,10 +3,14 @@ const logger = require('../internal/logger').setup_logger();
 const notfound = require('../internal/not_found');
 const error_middleware = require('../app/errors');
 const routes = require('./routes');
+const express = require('express');
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended:false}));
 
 var server = {};
 
-module.exports.setup = function(app){
+module.exports.setup = function(){
     server.app = app;
     server.db = new Pool({
         user:     process.env.DB_USER,

@@ -1,22 +1,26 @@
-const supertest = require('supertest');
+const request = require('supertest');
 const server = require('../server');
-const express = require('express');
-const app = express();
 
-describe("Testing API", function() {
+describe("POST /transaction", function(){
+    it("returns sent transaction or an error", async function(done){
+        var valid_transaction = {
+            nsu:        '0451456',
+            valor:      79.99,
+            bandeira:   'VISA',
+            modalidade: 'credito',
+            horario:    '2019-01-04T12:43:20-03:00'
+        };
 
-    it("Tests the base route of the site", async function(){
-
-        // Setup server
-        const s = server.setup(app);
-
-        // Start listening
-        const connection = server.start(s, '8080');
-
-        const response =  await supertest(connection).get('/');
-
-        expect(response.status).toBe(200);
-
-        connection.close();
-    })
-});
+        request(server.setup().app).
+            post('/transaction').
+            set('Accept', 'application/json').
+            expect('Content-Type', /json/).
+            send(valid_transaction).
+            expect(200, valid_transaction).
+            end(function(err, res){
+                console.log(res.body);
+                if (err) return done(err);
+                done();
+            });
+    });
+})
