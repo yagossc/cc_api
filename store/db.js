@@ -3,6 +3,7 @@ const assert = require('assert').strict;
 
 let db;
 
+// init opens the database connection
 module.exports.init = function(callback) {
     if (db){
         console.warn("Trying to init DB again.");
@@ -26,7 +27,31 @@ module.exports.init = function(callback) {
         });
 }
 
+// get returns the active database connection
 module.exports.get = function() {
-    assert.ok(db, "Database not initialized, please call init().")
+    assert.ok(db, "Database not initialized, please call init().");
     return db;
+}
+
+// query returns a promise for a given sql query
+module.exports.query = function(query, params, callback) {
+    return new Promise(function(resolve, reject){
+        assert.ok(db, "Database not initialized, please call init().").then(
+            function(db_exists){
+                return db.query(query, params)
+            },
+            function(err){
+                reject(err.message);
+            }
+        ).then(
+            function(query_sucessful){
+                resolve(query_sucessful);
+            },
+            function(err){
+                reject(err.message);
+            }
+        ).catch(function(err){
+            reject(err.message);
+        });
+    });
 }
