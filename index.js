@@ -15,7 +15,7 @@ db.init(function(err){
 
 // Execute migrations
 const migrations = require('./internal/migrations');
-err = migrations.exec_migrations();
+err = migrations.exec_migrations('pg', 'postgres');
 if (err != null){
     console.error(err);
     process.exit(1);

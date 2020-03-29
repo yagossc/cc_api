@@ -1,16 +1,18 @@
 const db_migrate = require('db-migrate');
 
-const options = {
-    driver:   "pg",
-    user:     process.env.DB_USER,
-    host:     process.env.DB_HOST,
-    databse:  process.env.DB,
-    password: process.env.DB_PASS,
-    port:     process.env.DB_PORT,
-    schema:   "public"
-}
+module.exports.exec_migrations = function(driver, scope) {
+    let options = {}
+    switch(driver){
+    case 'pg':
+        options.env = 'pg';
+        break;
+    case 'sqlite':
+        options.env = 'test';
+        break;
+    default:
+        console.error("Driver not implemented yet.");
+    }
 
-module.exports.exec_migrations = function(){
     dbm = db_migrate.getInstance(true, options);
-    dbm.up();
+    dbm.up(scope);
 }

@@ -34,7 +34,7 @@ module.exports.insert_transaction = function(req, res, next) {
             incoming.uuid = uuid();
             return transaction_store.insert(incoming);
         }).catch(function(err){
-            console.log("Insertion error: "+err.message);
+            console.error("Insertion error: "+err.message);
             next(err);
         }).
         then(function(inserted){
