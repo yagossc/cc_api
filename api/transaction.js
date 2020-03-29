@@ -1,8 +1,10 @@
-const transaction = require("../app/transaction");
+const transaction_model = require("../app/transaction");
+const transaction_store = require("../store/transaction");
 const valid = require("./valid");
+const {v4: uuid} = require("uuid");
 
 module.exports.insert_transaction = function(req, res, next) {
-    incoming = new transaction(req.body);
+    incoming = new transaction_model(req.body);
 
     var validate_input = new Promise( function(resolve, reject){
         try {
@@ -27,12 +29,25 @@ module.exports.insert_transaction = function(req, res, next) {
         resolve();
     });
 
-    validate_input.then(
-        function(sucess){
-            res.json(req.body);
-        },
-        function(err){
-            next(err)
+    validate_input.
+        then(function(validated){
+            incoming.data.uuid = uuid();
+            return transaction_store.insert(incoming);
+        }).catch(function(err){
+            console.log("Error inserting: "+err.message);
+            next(err);
+        }).
+        then(function(inserted){
+            console.log("Inserted new transaction:");
+            console.log(inserted.rows);
+
+            result = new transaction_model(inserted.rows);
+            result.data.bandeira = result.data.bandeira == 'v' ? 'VISA':'MASTERCARD';
+            result.data.modalidade = result.data.modalidade == 'd' ? 'debito':'credito';
+            res.json(result);
+        }).catch(function(err){
+            console.error(err.message);
+            next(err);
         });
 }
 

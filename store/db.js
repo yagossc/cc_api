@@ -34,24 +34,6 @@ module.exports.get = function() {
 }
 
 // query returns a promise for a given sql query
-module.exports.query = function(query, params, callback) {
-    return new Promise(function(resolve, reject){
-        assert.ok(db, "Database not initialized, please call init().").then(
-            function(db_exists){
-                return db.query(query, params)
-            },
-            function(err){
-                reject(err.message);
-            }
-        ).then(
-            function(query_sucessful){
-                resolve(query_sucessful);
-            },
-            function(err){
-                reject(err.message);
-            }
-        ).catch(function(err){
-            reject(err.message);
-        });
-    });
+module.exports.query = function(query, params) {
+    return db.query(query, params);
 }
