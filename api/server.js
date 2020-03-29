@@ -1,4 +1,3 @@
-const { Pool } = require('pg');
 const logger = require('../internal/logger').setup_logger();
 const notfound = require('../internal/not_found');
 const error_middleware = require('../app/errors');
@@ -12,13 +11,6 @@ var server = {};
 
 module.exports.setup = function(){
     server.app = app;
-    server.db = new Pool({
-        user:     process.env.DB_USER,
-        host:     process.env.DB_HOST,
-        databse:  process.env.DB,
-        password: process.env.DB_PASS,
-        port:     process.env.DB_PORT,
-    });
 
     // Setup and use logger
     server.app.use(logger);
