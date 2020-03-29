@@ -7,12 +7,12 @@ module.exports.insert = async function(transaction) {
              VALUES ($1, $2, $3, $4, $5, $6)
              returning *`;
 
-    const params = [transaction.data.uuid,
-                    transaction.data.nsu,
-                    transaction.data.valor,
-                    transaction.data.bandeira == 'VISA' ? 'v':'m',
-                    transaction.data.modalidade == 'debito' ? 'd':'c',
-                    transaction.data.horario];
+    const params = [transaction.uuid,
+                    transaction.nsu,
+                    transaction.valor,
+                    transaction.bandeira == 'VISA' ? 'v':'m',
+                    transaction.modalidade == 'debito' ? 'd':'c',
+                    transaction.horario];
 
     return db.query(query, params);
 }

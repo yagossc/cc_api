@@ -4,23 +4,23 @@ const valid = require("./valid");
 const {v4: uuid} = require("uuid");
 
 module.exports.insert_transaction = function(req, res, next) {
-    incoming = new transaction_model(req.body);
+    incoming = transaction_model.sanitize(req.body);
 
     var validate_input = new Promise( function(resolve, reject){
         try {
-            if (!incoming.data.nsu) {
+            if (!incoming.nsu) {
                 throw new Error("invalid.nsu");
             }
-            if (!incoming.data.valor || !valid.valor(incoming.data.valor)) {
+            if (!incoming.valor || !valid.valor(incoming.valor)) {
                 throw new Error("invalid.valor");
             }
-            if (!incoming.data.bandeira || !valid.bandeira(incoming.data.bandeira)) {
+            if (!incoming.bandeira || !valid.bandeira(incoming.bandeira)) {
                 throw new Error("invalid.bandeira");
             }
-            if (!incoming.data.modalidade || !valid.modalidade(incoming.data.modalidade)) {
+            if (!incoming.modalidade || !valid.modalidade(incoming.modalidade)) {
                 throw new Error("invalid.modalidade");
             }
-            if(!incoming.data.horario || !valid.horario(incoming.data.horario)){
+            if(!incoming.horario || !valid.horario(incoming.horario)){
                 throw new Error("invalid.horario");
             }
         }catch(err){
@@ -31,19 +31,19 @@ module.exports.insert_transaction = function(req, res, next) {
 
     validate_input.
         then(function(validated){
-            incoming.data.uuid = uuid();
+            incoming.uuid = uuid();
             return transaction_store.insert(incoming);
         }).catch(function(err){
-            console.log("Error inserting: "+err.message);
+            console.log("Insertion error: "+err.message);
             next(err);
         }).
         then(function(inserted){
             console.log("Inserted new transaction:");
             console.log(inserted.rows);
 
-            result = new transaction_model(inserted.rows);
-            result.data.bandeira = result.data.bandeira == 'v' ? 'VISA':'MASTERCARD';
-            result.data.modalidade = result.data.modalidade == 'd' ? 'debito':'credito';
+            result = transaction_model.sanitize(inserted.rows);
+            result.bandeira = result.bandeira == 'v' ? 'VISA':'MASTERCARD';
+            result.modalidade = result.modalidade == 'd' ? 'debito':'credito';
             res.json(result);
         }).catch(function(err){
             console.error(err.message);
