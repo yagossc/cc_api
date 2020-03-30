@@ -1,12 +1,18 @@
+// Middlewares
 const logger = require('../internal/logger').setup_logger();
 const notfound = require('../internal/not_found');
 const error_middleware = require('../app/errors');
+
+// API Routes
 const routes = require('./routes');
+
+// Express
 const express = require('express');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+// Swagger docs
 const swaggerui = require('swagger-ui-express');
 const swaggerdoc = require('swagger-jsdoc');
 
@@ -26,7 +32,7 @@ const specs = swaggerdoc(options);
 
 var server = {};
 
-module.exports.setup = function(){
+module.exports.init = function(){
     server.app = app;
 
     // Setup documentation

@@ -23,7 +23,7 @@ if (err != null){
 
 // Setup and Start server
 const server = require('./api/server');
-const s = server.setup();
+const s = server.init();
 const listenner = server.start(s, process.env.TAPI_PORT);
 
 // Lock graceful shutdown routine

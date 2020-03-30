@@ -23,7 +23,7 @@ describe("POST /transaction", function(){
             horario:    '2019-01-04T12:43:20-03:00'
         };
 
-        let test_server = await server.setup();
+        let test_server = await server.init();
         request(test_server.app).
             post('/transaction').
             set('Accept', 'application/json').
