@@ -6,7 +6,7 @@ const {v4: uuid} = require("uuid");
 module.exports.insert_transaction = function(req, res, next) {
     incoming = transaction_model.sanitize(req.body);
 
-    var validate_input = new Promise( function(resolve, reject){
+    var validate_input = new Promise(function(resolve, reject){
         try {
             if (!incoming.nsu) {
                 throw new Error("invalid.nsu");
@@ -31,21 +31,25 @@ module.exports.insert_transaction = function(req, res, next) {
 
     validate_input.
         then(function(validated){
-            incoming.uuid = uuid();
+            incoming.id = uuid();
             return transaction_store.insert(incoming);
         }).catch(function(err){
             console.error("Insertion error: "+err.message);
             next(err);
         }).
-        then(function(inserted){
-            console.log("Inserted new transaction:");
-            console.log(inserted.rows[0]);
-
-            // transfer data to response format
-            result = transaction_store.dto(inserted.rows[0]);
-            result.bandeira = result.bandeira == 'v' ? 'VISA':'MASTERCARD';
-            result.modalidade = result.modalidade == 'd' ? 'debito':'credito';
-            res.json(result);
+        then(
+            function(inserted){
+                console.log("Inserted new transaction:");
+                return transaction_store.find_by_id(incoming.id);
+            },
+            function(err){
+                throw new Error("Could not insert transaction: "+ err.message);
+            }).catch(function(err){
+                console.error(err.message);
+                next(err);
+            }).
+        then(function(result_transaction){
+            res.json(transaction_store.dto(result_transaction.rows[0]));
         }).catch(function(err){
             console.error(err.message);
             next(err);

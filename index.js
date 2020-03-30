@@ -29,7 +29,3 @@ const listenner = server.start(s, process.env.TAPI_PORT);
 // Lock graceful shutdown routine
 const system = require('./internal/system');
 system.graceful_shutdown(listenner, db);
-
-// Setup doc
-const swaggerapi = require('./swagger');
-swaggerapi(s.app);

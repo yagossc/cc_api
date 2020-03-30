@@ -5,14 +5,15 @@ module.exports.exec_migrations = function(driver, scope) {
     switch(driver){
     case 'pg':
         options.env = 'pg';
+        dbm = db_migrate.getInstance(true, options);
+        dbm.up(scope);
         break;
     case 'sqlite':
-        options.env = 'test';
+        let migration = require('../migrations/sqlite/migration');
+        let db = require('../store/db').get();
+        migration.up(db);
         break;
     default:
         console.error("Driver not implemented yet.");
     }
-
-    dbm = db_migrate.getInstance(true, options);
-    dbm.up(scope);
 }
