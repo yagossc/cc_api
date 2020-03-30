@@ -1,25 +1,31 @@
 // Load the environment config
 const dotenv = require('dotenv');
-dotenv.config();
+config = dotenv.config();
+if (config.error) {
+    console.error(config.error);
+    process.exit(1);
+}
 
-// Server module
-const server = require('./api/server');
-
-// Setup server
-const s = server.setup();
-
-// Start listening
-const connection = server.start(s, process.env.TAPI_PORT);
-
-// Lock graceful shutdown routine
-const system = require('./internal/system');
-system.graceful_shutdown(connection, s.db);
-
-// Setup doc
-const swaggerapi = require('./swagger');
-swaggerapi(s.app);
+// Initialize database;
+const db = require('./store/db');
+db.init(function(err){
+    console.error(err);
+    process.exit(1);
+});
 
 // Execute migrations
 const migrations = require('./internal/migrations');
-err = migrations.exec_migrations();
-if (err != null) os.exit(1);
+err = migrations.exec_migrations('pg', 'postgres');
+if (err != null){
+    console.error(err);
+    process.exit(1);
+}
+
+// Setup and Start server
+const server = require('./api/server');
+const s = server.setup();
+const listenner = server.start(s, process.env.TAPI_PORT);
+
+// Lock graceful shutdown routine
+const system = require('./internal/system');
+system.graceful_shutdown(listenner, db);

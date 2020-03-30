@@ -1,24 +1,26 @@
-const transaction = require("../app/transaction");
+const transaction_model = require("../app/transaction");
+const transaction_store = require("../store/transaction");
 const valid = require("./valid");
+const {v4: uuid} = require("uuid");
 
 module.exports.insert_transaction = function(req, res, next) {
-    incoming = new transaction(req.body);
+    incoming = transaction_model.sanitize(req.body);
 
-    var validate_input = new Promise( function(resolve, reject){
+    var validate_input = new Promise(function(resolve, reject){
         try {
-            if (!incoming.data.nsu) {
+            if (!incoming.nsu) {
                 throw new Error("invalid.nsu");
             }
-            if (!incoming.data.valor || !valid.valor(incoming.data.valor)) {
+            if (!incoming.valor || !valid.valor(incoming.valor)) {
                 throw new Error("invalid.valor");
             }
-            if (!incoming.data.bandeira || !valid.bandeira(incoming.data.bandeira)) {
+            if (!incoming.bandeira || !valid.bandeira(incoming.bandeira)) {
                 throw new Error("invalid.bandeira");
             }
-            if (!incoming.data.modalidade || !valid.modalidade(incoming.data.modalidade)) {
+            if (!incoming.modalidade || !valid.modalidade(incoming.modalidade)) {
                 throw new Error("invalid.modalidade");
             }
-            if(!incoming.data.horario || !valid.horario(incoming.data.horario)){
+            if(!incoming.horario || !valid.horario(incoming.horario)){
                 throw new Error("invalid.horario");
             }
         }catch(err){
@@ -27,12 +29,30 @@ module.exports.insert_transaction = function(req, res, next) {
         resolve();
     });
 
-    validate_input.then(
-        function(sucess){
-            res.json(req.body);
-        },
-        function(err){
-            next(err)
+    validate_input.
+        then(function(validated){
+            incoming.id = uuid();
+            return transaction_store.insert(incoming);
+        }).catch(function(err){
+            console.error("Insertion error: "+err.message);
+            next(err);
+        }).
+        then(
+            function(inserted){
+                console.log("Inserted new transaction:");
+                return transaction_store.find_by_id(incoming.id);
+            },
+            function(err){
+                throw new Error("Could not insert transaction: "+ err.message);
+            }).catch(function(err){
+                console.error(err.message);
+                next(err);
+            }).
+        then(function(result_transaction){
+            res.json(transaction_store.dto(result_transaction.rows[0]));
+        }).catch(function(err){
+            console.error(err.message);
+            next(err);
         });
 }
 
