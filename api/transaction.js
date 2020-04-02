@@ -6,6 +6,7 @@ const {v4: uuid} = require("uuid");
 module.exports.insert_transaction = function(req, res, next) {
     incoming = transaction_model.sanitize(req.body);
 
+    // Input validations Promise
     var validate_input = new Promise(function(resolve, reject){
         try {
             if (!incoming.nsu) {
@@ -29,6 +30,10 @@ module.exports.insert_transaction = function(req, res, next) {
         resolve();
     });
 
+    // Resolve input validations
+    // Then insert new transaction
+    // Then retrieve validation from db
+    // Then send it as response
     validate_input.
         then(function(validated){
             incoming.id = uuid();
