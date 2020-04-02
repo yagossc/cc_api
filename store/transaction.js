@@ -1,10 +1,11 @@
 const db = require('./db');
+const fees = require('../internal/fees');
 
 module.exports.insert = function(transaction) {
 
     query = `INSERT INTO
-             transactions(transaction_id, transaction_nsu, transaction_valor, transaction_bandeira, transaction_modalidade, transaction_horario)
-             VALUES ($1, $2, $3, $4, $5, $6)`;
+             transactions(transaction_id, transaction_nsu, transaction_valor, transaction_bandeira, transaction_modalidade, transaction_horario, transaction_liquido)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`;
              // returning *`;
 
     const params = [transaction.id,
@@ -12,7 +13,8 @@ module.exports.insert = function(transaction) {
                     transaction.valor,
                     transaction.bandeira == 'VISA' ? 'v':'m',
                     transaction.modalidade == 'debito' ? 'd':'c',
-                    transaction.horario];
+                    transaction.horario,
+                    fees.collect(transaction.modalidade, transaction.valor)];
 
     return db.query(query, params);
 }
@@ -30,6 +32,7 @@ module.exports.find_by_id = function(id) {
     // return find_transaction(uuid, null, null, null, null, null);
 }
 
+// This is an attempt to make a generic function for find_by_*
 // let find_transaction = function(uuid, nsu, valor, bandeira, modalidade, horario) {
 //     query_first = `SELECT transaction_uuid,
 //                     transaction_nsu,
@@ -46,7 +49,6 @@ module.exports.find_by_id = function(id) {
 //     query_bandeira =   !bandeira ?   null : `AND transaction_bandeira = $1`;
 //     query_modalidade = !modalidade ? null : `AND transaction_modalidade = $1`;
 //     query_horario =    !horario ?   n null : `AND transaction_horario = $1`;
-
 // }
 
 // dto transfers data from an object with
