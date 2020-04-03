@@ -15,11 +15,13 @@ db.init(function(err){
 
 // Execute migrations
 const migrations = require('./internal/migrations');
-err = migrations.exec_migrations('pg', 'postgres');
-if (err != null){
-    console.error(err);
-    process.exit(1);
-}
+err = migrations.exec_migrations('pg', 'postgres', function(err){
+    if (err) {
+        console.error(err);
+        process.exit(1);
+    }
+});
+
 
 // Setup and Start server
 const server = require('./api/server');

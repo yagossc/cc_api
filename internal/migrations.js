@@ -1,7 +1,7 @@
 const db_migrate = require('db-migrate');
 const path = require('path');
 
-module.exports.exec_migrations = function(driver, scope) {
+module.exports.exec_migrations = function(driver, scope, callback) {
     let options = {}
     switch(driver){
     case 'pg':
@@ -13,7 +13,7 @@ module.exports.exec_migrations = function(driver, scope) {
     case 'sqlite':
         let migration = require('../migrations/sqlite/migrations');
         let db = require('../store/db').get();
-        migration.up(db);
+        migration.up(db, callback);
         break;
 
     default:

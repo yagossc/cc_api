@@ -7,22 +7,29 @@ module.exports.up = function(db, callback) {
                 transaction_bandeira VARCHAR(1),
                 transaction_modalidade VARCHAR(1),
                 transaction_horario TIMESTAMP,
-                transaction_liquido FLOAT(2),
 
                 CONSTRAINT pk_transaction PRIMARY KEY (transaction_id)
               );`
 
-    // migrations[1] = `ALTER TABLE transactions
-    //             ADD COLUMN transaction_liquido FLOAT(2);`
+    migrations[1] = `ALTER TABLE transactions
+                ADD COLUMN transaction_liquido FLOAT(2);`
 
-    let migration_error;
     for(let i = 0; i < migrations.length; i++){
-        db.run(migrations[i], [], function(err){
-            if (err) {
-                migration_error = new Error("Could not migrate sqlite3 db: "+err.message);
+        run_migration(db, migrations[i], function(err){
+            if(err){
+                console.log("Could not run migration-"+i);
+            } else {
+                console.log("Migration run.");
             }
-            console.log("Migration ok.");
         });
     }
-    if (migration_error) return callback(migration_error);
+}
+
+let run_migration = async function(db, migration, callback) {
+    await db.run(migration, [], function(err){
+        if (err) {
+            return new Error("Could not migrate sqlite3 db: "+err.message);
+        }
+        console.log("Migration ok.");
+    });
 }
