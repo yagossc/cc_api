@@ -25,7 +25,8 @@ module.exports.find_by_id = function(id) {
                     transaction_valor,
                     transaction_bandeira,
                     transaction_modalidade,
-                    transaction_horario
+                    transaction_horario,
+                    transaction_liquido
              FROM   transactions
              WHERE  transaction_id = $1`;
     return db.query(query, [id]);
@@ -58,6 +59,7 @@ module.exports.dto = function(data) {
     dtobj = {};
     dtobj.nsu =        data.transaction_nsu;
     dtobj.valor =      data.transaction_valor;
+    dtobj.liquido =    data.transaction_liquido;
     dtobj.bandeira =   data.transaction_bandeira == 'v' ? 'VISA' : 'MASTERCARD';
     dtobj.modalidade = data.transaction_modalidade == 'd' ? 'debito' : 'credito';
     dtobj.horario =    data.transaction_horario;
