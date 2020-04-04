@@ -1,5 +1,6 @@
 const db = require('./db');
 const fees = require('../internal/fees');
+const withdraw = require('../internal/withdraw_date');
 
 module.exports.insert = function(transaction) {
 
@@ -15,6 +16,7 @@ module.exports.insert = function(transaction) {
                     transaction.modalidade == 'debito' ? 'd':'c',
                     transaction.horario,
                     fees.collect(transaction.modalidade, transaction.valor)];
+    console.log("diponivel: "+withdraw.get(transaction.horario, transaction.modalidade));
 
     return db.query(query, params);
 }
