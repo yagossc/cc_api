@@ -7,7 +7,19 @@ module.exports.get = function(date, modalidade) {
         return withdraw_date;
     }
 
-    return modalidade == 'debito' ? next_business_day(withdraw_date) : next_business_day(withdraw_date.add_days(30));
+    withdraw_date = modalidade == 'debito' ? next_business_day(withdraw_date) : next_business_day(withdraw_date.add_days(30));
+    return format_YYYY_MM_DD(withdraw_date);
+}
+
+// format the output date as YYYY-MM-DD
+var format_YYYY_MM_DD = function(date) {
+    let fmtday = date.getDate().toString();
+    fmtday.length == 1 ? fmtday = '0'+fmtday : fmtday;
+
+    let fmtmonth = (date.getMonth() + 1).toString();
+    fmtmonth.length == 1 ? fmtmonth = '0'+fmtmonth : fmtmonth;
+
+    return date.getFullYear()+'-'+fmtmonth+'-'+fmtday;
 }
 
 // next_business_day calculates the
