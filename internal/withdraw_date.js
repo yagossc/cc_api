@@ -1,3 +1,4 @@
+// get the available withdraw date for the transaction
 module.exports.get = function(date, modalidade) {
     var withdraw_date = new Date(date);
     Date.prototype.add_days = function(days) {
