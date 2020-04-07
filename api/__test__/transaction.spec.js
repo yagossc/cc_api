@@ -24,6 +24,16 @@ describe("POST /transaction", function(){
             horario:    '2019-01-04T12:43:20-03:00'
         };
 
+        let result_transaction = {
+            nsu: '0451456',
+            valor: 79.99,
+            liquido: 77.59,
+            bandeira: 'VISA',
+            modalidade: 'credito',
+            horario: '2019-01-04T12:43:20-03:00',
+            disponivel: '2019-02-04'
+        };
+
         let test_server = await server.init();
         request(test_server.app).
             post('/transaction').
@@ -36,7 +46,7 @@ describe("POST /transaction", function(){
                 modalidade: 'credito',
                 horario:    '2019-01-04T12:43:20-03:00'
             }).
-            expect(200, valid_transaction).
+            expect(200, result_transaction).
             end(function(err, res){
                 console.log(res.body);
                 if (err) return done(err);

@@ -5,9 +5,15 @@ const withdraw = require('../internal/withdraw_date');
 module.exports.insert = function(transaction) {
 
     query = `INSERT INTO
-             transactions(transaction_id, transaction_nsu, transaction_valor, transaction_bandeira, transaction_modalidade, transaction_horario, transaction_liquido)
-             VALUES ($1, $2, $3, $4, $5, $6, $7)`;
-             // returning *`;
+             transactions(transaction_id,
+                          transaction_nsu,
+                          transaction_valor,
+                          transaction_bandeira,
+                          transaction_modalidade,
+                          transaction_horario,
+                          transaction_liquido,
+                          transaction_disponivel)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
 
     const params = [transaction.id,
                     transaction.nsu,
@@ -15,8 +21,8 @@ module.exports.insert = function(transaction) {
                     transaction.bandeira == 'VISA' ? 'v':'m',
                     transaction.modalidade == 'debito' ? 'd':'c',
                     transaction.horario,
-                    fees.collect(transaction.modalidade, transaction.valor)];
-    console.log("diponivel: "+withdraw.get(transaction.horario, transaction.modalidade));
+                    fees.collect(transaction.modalidade, transaction.valor),
+                    withdraw.get(transaction.horario, transaction.modalidade)];
 
     return db.query(query, params);
 }
@@ -28,31 +34,12 @@ module.exports.find_by_id = function(id) {
                     transaction_bandeira,
                     transaction_modalidade,
                     transaction_horario,
-                    transaction_liquido
+                    transaction_liquido,
+                    transaction_disponivel
              FROM   transactions
              WHERE  transaction_id = $1`;
     return db.query(query, [id]);
-    // return find_transaction(uuid, null, null, null, null, null);
 }
-
-// This is an attempt to make a generic function for find_by_*
-// let find_transaction = function(uuid, nsu, valor, bandeira, modalidade, horario) {
-//     query_first = `SELECT transaction_uuid,
-//                     transaction_nsu,
-//                     transaction_valor,
-//                     transaction_bandeira,
-//                     transaction_modalidade,
-//                     transaction_horario
-//              FROM   transaction
-//              WHERE  1=1`;
-
-//     query_uuid =       !uuid ?       null : `AND transaction_uuid = $1`;
-//     query_nsu =        !nsu ?        null : `AND transaction_nsu = $1`;
-//     query_valor =      !valor ?      null : `AND transaction_valor = $1`;
-//     query_bandeira =   !bandeira ?   null : `AND transaction_bandeira = $1`;
-//     query_modalidade = !modalidade ? null : `AND transaction_modalidade = $1`;
-//     query_horario =    !horario ?   n null : `AND transaction_horario = $1`;
-// }
 
 // dto transfers data from an object with
 // fields named from the database's table
@@ -65,6 +52,7 @@ module.exports.dto = function(data) {
     dtobj.bandeira =   data.transaction_bandeira == 'v' ? 'VISA' : 'MASTERCARD';
     dtobj.modalidade = data.transaction_modalidade == 'd' ? 'debito' : 'credito';
     dtobj.horario =    data.transaction_horario;
+    dtobj.disponivel = data.transaction_disponivel;
 
     return dtobj;
 }

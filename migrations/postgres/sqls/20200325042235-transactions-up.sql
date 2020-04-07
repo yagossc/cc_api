@@ -5,7 +5,7 @@ CREATE TABLE transactions (
   transaction_value FLOAT(2),
   transaction_cflag VARCHAR(1),
   transaction_type VARCHAR(1),
-  transaction_date TIMESTAMP,
+  transaction_date TEXT,
 
   CONSTRAINT pk_transaction PRIMARY KEY (transaction_id)
 );

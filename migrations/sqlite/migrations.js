@@ -1,4 +1,4 @@
-module.exports.up = function(db, callback) {
+module.exports.up = async function(db, callback) {
     var migrations = [];
     migrations[0] = `CREATE TABLE transactions (
                 transaction_id UUID NOT NULL,
@@ -6,16 +6,21 @@ module.exports.up = function(db, callback) {
                 transaction_valor FLOAT(2),
                 transaction_bandeira VARCHAR(1),
                 transaction_modalidade VARCHAR(1),
-                transaction_horario TIMESTAMP,
+                transaction_horario TEXT,
+                transaction_liquido FLOAT(2),
+                transaction_disponivel TEXT,
 
-                CONSTRAINT pk_transaction PRIMARY KEY (transaction_id)
-              );`
+                CONSTRAINT pk_transaction PRIMARY KEY (transaction_id));
+                `
 
     migrations[1] = `ALTER TABLE transactions
-                ADD COLUMN transaction_liquido FLOAT(2);`
+                     ADD COLUMN transaction_liquido FLOAT(2);`
+
+    migrations[2] = `ALTER TABLE transactions
+                     ADD COLUMN transaction_disponivel TEXT;`
 
     for(let i = 0; i < migrations.length; i++){
-        run_migration(db, migrations[i], function(err){
+       run_migration(db, migrations[i], function(err){
             if(err){
                 console.log("Could not run migration-"+i);
             } else {
