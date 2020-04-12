@@ -8,8 +8,10 @@ if (config.error) {
 
 // Initialize database;
 const db = require('./store/db');
-db.init(function(err){
-    console.error(err);
+db.init( success => {
+    console.log('Connected to DB.');
+}).catch(err => {
+    console.error("Could not connect to database: "+err);
     process.exit(1);
 });
 

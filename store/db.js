@@ -5,7 +5,7 @@ let db;
 let driver;
 
 // init opens the database connection
-module.exports.init = function(callback) {
+module.exports.init = function() {
     if (db){
         console.warn("Trying to init DB again.");
         return callback(new Error('Database already initialized'));
@@ -21,13 +21,7 @@ module.exports.init = function(callback) {
         port:     process.env.DB_PORT,
     });
 
-    db.connect().
-        then(function(success){
-            console.log('Connected to DB.');
-        }).
-        catch(function(err){
-            return callback(new Error('Could not connect to database'+err.stack));
-        });
+    return db.connect();
 }
 
 // get returns the active database connection
@@ -56,6 +50,7 @@ module.exports.query = function(query, params) {
     }
 }
 
+// mock mocks a in memory sqlite db for testin
 module.exports.mock = function(callback) {
     if (db){
         console.warn("Trying to init DB again.");
@@ -71,5 +66,4 @@ module.exports.mock = function(callback) {
         }
         console.log('Connected to DB.');
     });
-
 }
