@@ -23,7 +23,7 @@ describe("POST /transaction", function(){
         disponivel: '2019-02-04'
     };
 
-    it("returns sent transaction or an error", async function(done){
+    it("returns inserted transaction", async function(done){
         let initialized = await db.mock();
 
         const migrations = require('../../internal/migrations');
@@ -37,6 +37,25 @@ describe("POST /transaction", function(){
             expect('Content-Type', /json/).
             send(valid_transaction).
             expect(200, result_transaction).
+            end(function(err, res){
+                console.log(res.body);
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it("returns an invalid input error", async function(done){
+
+        let test_server = await server.init();
+
+        request(test_server.app).
+            post('/transaction').
+            set('Accept', 'application/json').
+            expect('Content-Type', /json/).
+            send({
+                nsu: "",
+            }).
+            expect(400, { message: "Invalid 'NSU' for transaction." }).
             end(function(err, res){
                 console.log(res.body);
                 if (err) return done(err);
