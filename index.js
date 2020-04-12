@@ -8,7 +8,8 @@ if (config.error) {
 
 // Initialize database;
 const db = require('./store/db');
-db.init( success => {
+let initialized = db.init();
+initialized.then( success => {
     console.log('Connected to DB.');
 }).catch(err => {
     console.error("Could not connect to database: "+err);
@@ -17,13 +18,13 @@ db.init( success => {
 
 // Execute migrations
 const migrations = require('./internal/migrations');
-err = migrations.exec_migrations('pg', 'postgres', function(err){
-    if (err) {
-        console.error(err);
-        process.exit(1);
-    }
+let migrated = migrations.exec_migrations('pg', 'postgres');
+migrated.then(success => {
+    console.log("Migrations ok.");
+}).catch(err => {
+    console.error("Could not exec migrations: "+err);
+    process.exit(1);
 });
-
 
 // Setup and Start server
 const server = require('./api/server');

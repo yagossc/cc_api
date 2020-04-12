@@ -6,22 +6,24 @@ let driver;
 
 // init opens the database connection
 module.exports.init = function() {
-    if (db){
-        console.warn("Trying to init DB again.");
-        return callback(new Error('Database already initialized'));
-    }
+    return new Promise((resolve, reject) => {
+        if (db){
+            console.warn("Trying to init DB again.");
+            reject('Database already initialized');
+        }
 
-    driver = 'pg';
+        driver = 'pg';
 
-    db = new Client({
-        user:     process.env.DB_USER,
-        host:     process.env.DB_HOST,
-        database:  process.env.DB,
-        password: process.env.DB_PASS,
-        port:     process.env.DB_PORT,
-    });
+        db = new Client({
+            user:     process.env.DB_USER,
+            host:     process.env.DB_HOST,
+            database:  process.env.DB,
+            password: process.env.DB_PASS,
+            port:     process.env.DB_PORT,
+        });
 
-    return db.connect();
+        resolve();
+    }).then(() => db.connect());
 }
 
 // get returns the active database connection
@@ -52,18 +54,20 @@ module.exports.query = function(query, params) {
 
 // mock mocks a in memory sqlite db for testin
 module.exports.mock = function(callback) {
-    if (db){
-        console.warn("Trying to init DB again.");
-        return callback(new Error('Database already initialized'));
-    }
 
-    driver = 'sqlite'
-    const sqlite3 = require('sqlite3').verbose();
-
-    db = new sqlite3.Database(':memory:', function(err){
-        if (err) {
-            return callback(new Error("Could not connect to database: "+err.message));
+    return new Promise((resolve, reject) => {
+        driver = 'sqlite'
+        const sqlite3 = require('sqlite3').verbose();
+        if (db){
+            console.warn("Trying to init DB again.");
+            reject('Database already initialized');
         }
-        console.log('Connected to DB.');
+
+        db = new sqlite3.Database(':memory:', function(err){
+            if (err) {
+                reject(err.message);
+            }
+        });
+        resolve();
     });
 }

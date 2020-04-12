@@ -1,4 +1,4 @@
-module.exports.up = async function(db, callback) {
+module.exports.up = async function(db) {
     var migrations = [];
     migrations[0] = `CREATE TABLE transactions (
                 transaction_id UUID NOT NULL,
@@ -7,8 +7,6 @@ module.exports.up = async function(db, callback) {
                 transaction_bandeira VARCHAR(1),
                 transaction_modalidade VARCHAR(1),
                 transaction_horario TEXT,
-                transaction_liquido FLOAT(2),
-                transaction_disponivel TEXT,
 
                 CONSTRAINT pk_transaction PRIMARY KEY (transaction_id));
                 `
@@ -20,21 +18,18 @@ module.exports.up = async function(db, callback) {
                      ADD COLUMN transaction_disponivel TEXT;`
 
     for(let i = 0; i < migrations.length; i++){
-       run_migration(db, migrations[i], function(err){
-            if(err){
-                console.log("Could not run migration-"+i);
-            } else {
-                console.log("Migration run.");
-            }
-        });
+        await run_migration(db, migrations[i]);
+        console.log("Migration["+i+"] ok.");
     }
 }
 
-let run_migration = async function(db, migration, callback) {
-    await db.run(migration, [], function(err){
-        if (err) {
-            return new Error("Could not migrate sqlite3 db: "+err.message);
-        }
-        console.log("Migration ok.");
-    });
+let run_migration = function(db, migration) {
+    return new Promise((resolve, reject) => {
+        db.run(migration, [], function(err){
+            if (err) {
+                reject("Could not migrate sqlite3 db: "+err.message);
+            }
+            resolve("Migration ok.");
+        });
+    })
 }
