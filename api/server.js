@@ -1,4 +1,6 @@
+// Native modules
 const http = require('http');
+
 // Middlewares
 const logger = require('../internal/logger').setup_logger();
 const notfound = require('../internal/not_found');
@@ -29,15 +31,18 @@ const swagger_options = {
     apis: ['./api/routes.js']
 }
 
-const specs = swaggerdoc(swagger_options);
+const swagger_specs = swaggerdoc(swagger_options);
 
-var server = {};
+var server;
 
 module.exports.init = function(){
+    server = {};
+
     server.app = app;
 
-    // Setup documentation
-    server.app.use('/api-docs', swaggerui.serve, swaggerui.setup(specs));
+    // Setup swagger documentation
+    server.app.use('/api-docs', swaggerui.serve,
+                   swaggerui.setup(swagger_specs));
 
     // Setup and use logger
     server.app.use(logger);
@@ -54,15 +59,21 @@ module.exports.init = function(){
     return server;
 }
 
+// get returns the active server instance
+module.exports.get = function() {
+    assert.ok(server, "Server not initialized, please call init().");
+    return server;
+}
+
 module.exports.run = function(s, port) {
-    server = http.createServer(app);
+    server.conn = http.createServer(server.app);
     return new Promise((resolve, reject) => {
-        server.on('listening', () => {
+        server.conn.on('listening', () => {
             resolve();
         })
-        server.on('error', err => {
+        server.conn.on('error', err => {
             reject(err);
         })
-        server.listen(port);
+        server.conn.listen(port);
     })
 }
