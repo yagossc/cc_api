@@ -74,8 +74,8 @@ module.exports.mock = function(callback) {
 
 // close closes the current database connection
 module.exports.close = function() {
-    assert.ok(db, "Database not initialized, please call init().");
     return new Promise(resolve => {
+        assert.ok(db, "Database not initialized, please call init().");
         switch(driver){
         case 'pg':
             db.end(() => {

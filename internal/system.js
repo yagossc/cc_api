@@ -1,22 +1,30 @@
 const db = require('../store/db');
-let system = {}
+const server = require('../api/server');
 
+// graceful_shutdown listens for some signals
+// to properly cleanup before system shutdown
 module.exports.graceful_shutdown = function(server_conn, db_conn){
-    system.server_conn = server_conn;
-
     process.on('SIGTERM', handle)
     process.on('SIGINT', handle);
 }
 
-handle = function(server_conn, db_conn) {
+// handle handles the received signal
+handle = async function() {
+    let code = 0;
     console.log("Shutting down...\n");
-    system.server_conn.close(function() {
-        console.log("Server disconnected...");
-        conn = db.get();
-        conn.end(function(){
-            console.log("Database disconnected...");
-            console.log("Graceful shutdown.")
-            process.exit(0)
+    let server_shutdown = server.close();
+    server_shutdown
+        .catch(err => {
+            console.log("Error in shutdown proces: "+err);
+            code = 1; // Exit with error code
         })
-    })
+        .then(() => db.close())
+        .catch(err => {
+            console.log("Error in shutdown proces: "+err);
+            code = 1; // Exit with error code
+        })
+        .then(() => {
+            console.log("Graceful shutdown.")
+            process.exit(code);
+        });
 }

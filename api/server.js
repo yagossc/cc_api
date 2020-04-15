@@ -64,6 +64,8 @@ module.exports.init = function(){
         // Setup error middleware
         server.app.use(error_middleware.handler);
 
+        resolve();
+
     });
 }
 
@@ -90,8 +92,8 @@ module.exports.run = function(port) {
 
 // close performs the server shutdown
 module.exports.close = function() {
-    assert.ok(server, "Server not initialized, please call init().");
     return new Promise(resolve => {
+    assert.ok(server, "Server not initialized, please call init().");
         server.conn.on('close', () => {
             console.log("Server disconnected.");
             resolve();
