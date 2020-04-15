@@ -1,3 +1,4 @@
+const http = require('http');
 // Middlewares
 const logger = require('../internal/logger').setup_logger();
 const notfound = require('../internal/not_found');
@@ -16,7 +17,7 @@ app.use(express.urlencoded({extended:true}));
 const swaggerui = require('swagger-ui-express');
 const swaggerdoc = require('swagger-jsdoc');
 
-const options = {
+const swagger_options = {
     swaggerDefinition: {
         info: {
             title: 'eye_api',
@@ -28,7 +29,7 @@ const options = {
     apis: ['./api/routes.js']
 }
 
-const specs = swaggerdoc(options);
+const specs = swaggerdoc(swagger_options);
 
 var server = {};
 
@@ -53,6 +54,15 @@ module.exports.init = function(){
     return server;
 }
 
-module.exports.start = function(s, port) {
-    return s.app.listen(port, console.log("listening at "+ port));
+module.exports.run = function(s, port) {
+    server = http.createServer(app);
+    return new Promise((resolve, reject) => {
+        server.on('listening', () => {
+            resolve();
+        })
+        server.on('error', err => {
+            reject(err);
+        })
+        server.listen(port);
+    })
 }
