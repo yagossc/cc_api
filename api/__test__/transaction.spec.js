@@ -24,14 +24,16 @@ describe("POST /transaction", function(){
     };
 
     it("returns inserted transaction", async function(done){
-        let initialized = await db.mock();
+        await db.mock();
 
         const migrations = require('../../internal/migrations');
-        let migrated = await migrations.exec_migrations('sqlite', 'sqlite');
+        await migrations.exec_migrations('sqlite', 'sqlite');
 
-        let test_server = await server.init();
+        await server.init();
 
-        request(test_server.app).
+        let app = server.get().app;
+
+        request(app).
             post('/transaction').
             set('Accept', 'application/json').
             expect('Content-Type', /json/).
@@ -46,9 +48,8 @@ describe("POST /transaction", function(){
 
     it("returns an invalid input error", async function(done){
 
-        let test_server = await server.init();
-
-        request(test_server.app).
+        let app = server.get().app;
+        request(app).
             post('/transaction').
             set('Accept', 'application/json').
             expect('Content-Type', /json/).
