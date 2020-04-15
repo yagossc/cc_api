@@ -8,6 +8,9 @@ module.exports.handler = function(err, req, res, next) {
     ]);
 
     // Send 'Bad Request' status
-    res.status(400);
-    res.json({ message: error_codes.has(err.message) ? error_codes.get(err.message) : err });
+    let err_message = "Internal Server Error";
+    let code = 400;
+    error_codes.has(err.message) ? err_message = error_codes.get(err.message) : code = 500;
+    res.status(code);
+    res.json({ message: err_message });
 }
