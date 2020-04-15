@@ -1,9 +1,10 @@
 // Native modules
-const http = require('http');
+const http   = require('http');
+const assert = require('assert');
 
 // Middlewares
-const logger = require('../internal/logger').setup_logger();
-const notfound = require('../internal/not_found');
+const logger           = require('../internal/logger').setup_logger();
+const notfound         = require('../internal/not_found');
 const error_middleware = require('../app/errors');
 
 // API Routes
@@ -11,12 +12,12 @@ const routes = require('./routes');
 
 // Express
 const express = require('express');
-const app = express();
+const app     = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 // Swagger docs
-const swaggerui = require('swagger-ui-express');
+const swaggerui  = require('swagger-ui-express');
 const swaggerdoc = require('swagger-jsdoc');
 
 const swagger_options = {
@@ -35,28 +36,35 @@ const swagger_specs = swaggerdoc(swagger_options);
 
 var server;
 
+// init initializes a server with all its middlewares/routes
 module.exports.init = function(){
-    server = {};
+    return new Promise((resolve, reject) => {
 
-    server.app = app;
+        if (server){
+            console.warn("Trying to init server again.");
+            reject('Server already initialized');
+        }
+        server = {};
 
-    // Setup swagger documentation
-    server.app.use('/api-docs', swaggerui.serve,
-                   swaggerui.setup(swagger_specs));
+        server.app = app;
 
-    // Setup and use logger
-    server.app.use(logger);
+        // Setup swagger documentation
+        server.app.use('/api-docs', swaggerui.serve,
+                       swaggerui.setup(swagger_specs));
 
-    // Setup routes
-    routes.setup(server.app);
+        // Setup and use logger
+        server.app.use(logger);
 
-    // Better handle 404
-    server.app.use(notfound.handler);
+        // Setup routes
+        routes.setup(server.app);
 
-    // Setup error middleware
-    server.app.use(error_middleware.handler);
+        // Better handle 404
+        server.app.use(notfound.handler);
 
-    return server;
+        // Setup error middleware
+        server.app.use(error_middleware.handler);
+
+    });
 }
 
 // get returns the active server instance
@@ -65,7 +73,9 @@ module.exports.get = function() {
     return server;
 }
 
-module.exports.run = function(s, port) {
+// run creates the server connection listening
+module.exports.run = function(port) {
+    assert.ok(server, "Server not initialized, please call init().");
     server.conn = http.createServer(server.app);
     return new Promise((resolve, reject) => {
         server.conn.on('listening', () => {
@@ -76,4 +86,10 @@ module.exports.run = function(s, port) {
         })
         server.conn.listen(port);
     })
+}
+
+// close performs the server shutdown
+module.exports.close = function() {
+    assert.ok(server, "Server not initialized, please call init().");
+    server.conn.close();
 }

@@ -28,8 +28,8 @@ migrated.then(success => {
 
 // Setup and Start server
 const server = require('./api/server');
-const s = server.init();
-const run_server = server.run(s, process.env.TAPI_PORT);
+server.init();
+const run_server = server.run(process.env.TAPI_PORT);
 run_server.then(success => {
     console.log('Server up and running. Listenning at '+ process.env.TAPI_PORT);
 }).catch(err => {
@@ -39,4 +39,4 @@ run_server.then(success => {
 
 // Lock graceful shutdown routine
 // const system = require('./internal/system');
-// system.graceful_shutdown(listenner, db);
+// system.graceful_shutdown();

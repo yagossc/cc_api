@@ -34,6 +34,7 @@ module.exports.get = function() {
 
 // query returns a promise for a given sql query
 module.exports.query = function(query, params) {
+    assert.ok(db, "Database not initialized, please call init().");
     switch(driver){
     case 'pg':
         return db.query(query, params);
@@ -52,9 +53,8 @@ module.exports.query = function(query, params) {
     }
 }
 
-// mock mocks a in memory sqlite db for testin
+// mock mocks a in memory sqlite db for testing
 module.exports.mock = function(callback) {
-
     return new Promise((resolve, reject) => {
         driver = 'sqlite'
         const sqlite3 = require('sqlite3').verbose();
