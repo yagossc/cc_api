@@ -71,3 +71,20 @@ module.exports.mock = function(callback) {
         resolve();
     });
 }
+
+// close closes the current database connection
+module.exports.close = function() {
+    assert.ok(db, "Database not initialized, please call init().");
+    return new Promise(resolve => {
+        switch(driver){
+        case 'pg':
+            db.end(() => {
+                console.log("Database disconnected.");
+                resolve();
+            });
+            break;
+        default:
+            reject('Unknown driver.');
+        }
+    })
+}
