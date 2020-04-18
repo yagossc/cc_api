@@ -41,6 +41,19 @@ module.exports.find_by_id = function(id) {
     return db.query(query, [id]);
 }
 
+module.exports.find_all = function() {
+    query = `SELECT transaction_id,
+                    transaction_nsu,
+                    transaction_valor,
+                    transaction_bandeira,
+                    transaction_modalidade,
+                    transaction_horario,
+                    transaction_liquido,
+                    transaction_disponivel
+             FROM   transactions`;
+    return db.query(query);
+}
+
 // dto transfers data from an object with
 // fields named from the database's table
 // to one with the api exchangeable fields names
