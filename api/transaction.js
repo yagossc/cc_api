@@ -44,8 +44,9 @@ module.exports.insert_transaction = async function(req, res, next) {
     };
 }
 
-module.exports.get_all_transactions = function(req, res) {
-    res.json(req.body);
+module.exports.get_all_transactions = async function(req, res) {
+    let transactions = await transaction_store.find_all();
+    res.json(transactions.rows);
 }
 
 module.exports.get_balance = function(req, res) {
