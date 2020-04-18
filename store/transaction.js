@@ -53,19 +53,3 @@ module.exports.find_all = function() {
              FROM   transactions`;
     return db.query(query);
 }
-
-// dto transfers data from an object with
-// fields named from the database's table
-// to one with the api exchangeable fields names
-module.exports.dto = function(data) {
-    dtobj = {};
-    dtobj.nsu =        data.transaction_nsu;
-    dtobj.valor =      data.transaction_valor;
-    dtobj.liquido =    data.transaction_liquido;
-    dtobj.bandeira =   data.transaction_bandeira == 'v' ? 'VISA' : 'MASTERCARD';
-    dtobj.modalidade = data.transaction_modalidade == 'd' ? 'debito' : 'credito';
-    dtobj.horario =    data.transaction_horario;
-    dtobj.disponivel = data.transaction_disponivel;
-
-    return dtobj;
-}
