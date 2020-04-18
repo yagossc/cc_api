@@ -1,3 +1,4 @@
+// handler is the custom error handler for the api/express
 module.exports.handler = function(err, req, res, next) {
     var error_codes = new Map([
         ["invalid.nsu", "Invalid 'NSU' for transaction."],

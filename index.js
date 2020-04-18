@@ -6,37 +6,35 @@ if (config.error) {
     process.exit(1);
 }
 
-// Initialize database;
-const db = require('./store/db');
-let db_up = db.init();
-db_up.then( success => {
-    console.log('Connected to DB.');
-}).catch(err => {
-    console.error("Could not connect to database: "+err);
-    process.exit(1);
-});
-
-// Execute migrations
-const migrations = require('./internal/migrations');
-let migrated = migrations.exec_migrations('pg', 'postgres');
-migrated.then(success => {
-    console.log("Migrations ok.");
-}).catch(err => {
-    console.error("Could not exec migrations: "+err);
-    process.exit(1);
-});
-
-// Setup and Start server
-const server = require('./api/server');
-server.init();
-let run_server = server.run(process.env.TAPI_PORT);
-run_server.then(success => {
-    console.log('Server up and running. Listenning at '+ process.env.TAPI_PORT);
-}).catch(err => {
-    console.error("Could not start server: "+err);
-    process.exit(1);
-});
-
 // Lock graceful shutdown routine
 const system = require('./internal/system');
 system.graceful_shutdown();
+
+// Build all system's pieces
+// Initialize database;
+const db = require('./store/db');
+let db_up = db.init();
+
+// Execute migrations
+const migrations = require('./internal/migrations');
+let migrate = migrations.exec_migrations('pg', 'postgres');
+
+// Setup and Start server
+const server = require('./api/server');
+let run_server = server.init().then(() => {
+    server.run(process.env.TAPI_PORT);
+});
+
+// System going up event chain
+db_up.then( () => {
+    console.log('Connected to DB.');
+    return migrate;
+}).then(() => {
+    console.log("Migrations ok.");
+    return run_server;
+}).then(() => {
+    console.log('Server up and running. Listenning at '+ process.env.TAPI_PORT);
+}).catch(err => {
+    console.error("Could not build system: "+err);
+    process.exit(1);
+});
