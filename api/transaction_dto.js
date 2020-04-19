@@ -14,6 +14,9 @@ let one = module.exports.one = function(data) {
     return dtobj;
 }
 
+// many transfers data from an array
+// of database query results to the
+// expected api response format
 module.exports.many = function(data) {
     let dtobj = [];
     let check_count = 0;
