@@ -4,6 +4,7 @@ const transaction_store = require("../store/transaction");
 const valid = require("./valid");
 const {v4: uuid} = require("uuid");
 
+// POST /transaction handler function
 module.exports.insert_transaction = async function(req, res, next) {
     incoming = transaction_model.sanitize(req.body);
 
@@ -33,11 +34,11 @@ module.exports.insert_transaction = async function(req, res, next) {
 
 
     try {
-        await validate_input;
-        incoming.id = uuid();
+        await validate_input; incoming.id = uuid();
         await transaction_store.insert(incoming)
         let result_transaction = await transaction_store.find_by_id(incoming.id);
-        res.json(transaction_dto.one(result_transaction.rows[0]));
+        let response_transaction = await transaction_dto.one(result_transaction.rows[0]);
+        res.json(response_transaction);
 
     }catch(err){
         console.error("Error: "+err.message);
@@ -45,9 +46,12 @@ module.exports.insert_transaction = async function(req, res, next) {
     };
 }
 
+// GET /transaction handler function
 module.exports.get_all_transactions = async function(req, res) {
     let transactions = await transaction_store.find_all();
-    res.json(transaction_dto.many(transactions.rows));
+    let res_transactions = await transaction_dto.many(transactions.rows);
+
+    res.json(res_transactions);
 }
 
 module.exports.get_balance = function(req, res) {
