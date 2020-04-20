@@ -5,7 +5,7 @@ let db;
 let driver;
 
 // init opens the database connection
-module.exports.init = function() {
+module.exports.init = function() { // FIXME: include sqlite3 in init()
     return new Promise((resolve, reject) => {
         if (db){
             console.warn("Trying to init DB again.");
@@ -53,8 +53,9 @@ module.exports.query = function(query, params) {
     }
 }
 
+
 // mock mocks a in memory sqlite db for testing
-module.exports.mock = function(callback) {
+module.exports.mock = function(callback) { // FIX ME: this should seed/mock the database
     return new Promise((resolve, reject) => {
         driver = 'sqlite'
         const sqlite3 = require('sqlite3').verbose();
