@@ -1,5 +1,6 @@
 const u = require('./user');
 const t = require('./transaction');
+const b = require('./balance');
 
 module.exports.setup = function(app) {
     /**
@@ -137,5 +138,5 @@ module.exports.setup = function(app) {
      *           type: object
      *           $ref: '#/definitions/Balance'
      */
-    app.get('/balance', t.get_balance);
+    app.get('/balance', b.get_balance);
 }
