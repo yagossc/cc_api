@@ -5,7 +5,6 @@ const db = require('../../store/db');
 let valid_transaction = {
     nsu:        '0451456',
     valor:      79.99,
-    liquido:    77.59,
     bandeira:   'VISA',
     modalidade: 'credito',
     horario:    '2019-01-04T12:43:20-03:00'

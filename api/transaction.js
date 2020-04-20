@@ -51,7 +51,6 @@ module.exports.get_all_transactions = async function(req, res) {
     try{
         let transactions = await transaction_store.find_all();
         let res_transactions = await transaction_dto.many(transactions.rows);
-
         res.json(res_transactions);
     }catch(err){
         console.error('Error: '+err.message);
