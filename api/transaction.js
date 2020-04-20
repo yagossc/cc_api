@@ -48,8 +48,13 @@ module.exports.insert_transaction = async function(req, res, next) {
 
 // GET /transaction handler function
 module.exports.get_all_transactions = async function(req, res) {
-    let transactions = await transaction_store.find_all();
-    let res_transactions = await transaction_dto.many(transactions.rows);
+    try{
+        let transactions = await transaction_store.find_all();
+        let res_transactions = await transaction_dto.many(transactions.rows);
 
-    res.json(res_transactions);
+        res.json(res_transactions);
+    }catch(err){
+        console.error('Error: '+err.message);
+        next(err);
+    }
 }
