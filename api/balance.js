@@ -5,7 +5,6 @@ const balance_dto = require('./balance_dto');
 module.exports.get_balance = async function(req, res) {
     let transactions = await transactions_store.find_all();
     let balance = await balance_dto.calculate(transactions.rows);
-    console.log("Balance: "+balance);
 
     res.json(balance);
 }
