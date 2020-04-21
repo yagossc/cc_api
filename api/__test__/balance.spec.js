@@ -13,7 +13,7 @@ let valid_transaction = {
 describe("GET /balance", function(){
 
     it("returns the total available balance", async function(done){
-        await db.mock();
+        await db.init('sqlite');
 
         const migrations = require('../../internal/migrations');
         await migrations.exec_migrations('sqlite', 'sqlite');

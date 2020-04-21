@@ -26,6 +26,6 @@ module.exports.many = async function(data) {
         let tmp = await one(data[i]);
         check_count = dtobj.push(tmp);
     }
-    if (check_count != data.length) reject('could not do data transfer');
+    if (check_count != data.length) return new Error('could not do data transfer');
     else return dtobj;
 }

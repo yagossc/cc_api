@@ -23,7 +23,7 @@ let result_transaction = {
 describe("POST /transaction", function(){
 
     it("returns inserted transaction", async function(done){
-        await db.mock();
+        await db.init('sqlite');
 
         const migrations = require('../../internal/migrations');
         await migrations.exec_migrations('sqlite', 'sqlite');
