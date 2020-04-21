@@ -19,14 +19,13 @@ let one = module.exports.one = async function(data) {
 // many transfers data from an array
 // of database query results to the
 // expected api response format
-module.exports.many = function(data) {
-    return new Promise((resolve, reject) => {
-        let dtobj = [];
-        let check_count = 0;
-        data.forEach(function(item){
-            check_count = dtobj.push(one(item));
-        });
-        if (check_count != data.length) reject('could not complet elemet transfer');
-        resolve(dtobj);
-    })
+module.exports.many = async function(data) {
+    let dtobj = [];
+    let check_count = 0;
+    for(let i = 0; i < data.length; i++){
+        let tmp = await one(data[i]);
+        check_count = dtobj.push(tmp);
+    }
+    if (check_count != data.length) return new Error('could not do data transfer');
+    else return dtobj;
 }

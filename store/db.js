@@ -5,25 +5,50 @@ let db;
 let driver;
 
 // init opens the database connection
-module.exports.init = function() {
+module.exports.init = function(db_driver) {
     return new Promise((resolve, reject) => {
         if (db){
             console.warn("Trying to init DB again.");
             reject('Database already initialized');
         }
-
-        driver = 'pg';
-
-        db = new Client({
-            user:     process.env.DB_USER,
-            host:     process.env.DB_HOST,
-            database:  process.env.DB,
-            password: process.env.DB_PASS,
-            port:     process.env.DB_PORT,
-        });
-
         resolve();
-    }).then(() => db.connect());
+    }).then(() => {
+        new Promise((resolve, reject) => {
+            switch(db_driver){
+            case 'pg':
+                driver = 'pg';
+                db = new Client({
+                    user:     process.env.DB_USER,
+                    host:     process.env.DB_HOST,
+                    database: process.env.DB,
+                    password: process.env.DB_PASS,
+                    port:     process.env.DB_PORT,
+                });
+                break;
+
+            case 'sqlite':
+                driver = 'sqlite'
+                const sqlite3 = require('sqlite3').verbose();
+                db = new sqlite3.Database(':memory:', function(err){
+                    if (err) {
+                        reject(err.message);
+                    }
+                });
+                break;
+
+            default:
+                reject('Unknown driver');
+
+            }
+            resolve();
+        })
+    }).then(() => {
+        if (driver == 'pg'){
+            db.connect();
+        } else {
+            new Promise(resolve => resolve());
+        }
+    });
 }
 
 // get returns the active database connection
@@ -40,7 +65,7 @@ module.exports.query = function(query, params) {
         return db.query(query, params);
         break;
     case 'sqlite':
-        return new Promise(function(resolve, reject){
+        return new Promise((resolve, reject) => {
             db.all(query, params, function(err, rows){
                 if (err) {
                     reject("Could not perform query: "+err.message);
@@ -53,28 +78,9 @@ module.exports.query = function(query, params) {
     }
 }
 
-// mock mocks a in memory sqlite db for testing
-module.exports.mock = function(callback) {
-    return new Promise((resolve, reject) => {
-        driver = 'sqlite'
-        const sqlite3 = require('sqlite3').verbose();
-        if (db){
-            console.warn("Trying to init DB again.");
-            reject('Database already initialized');
-        }
-
-        db = new sqlite3.Database(':memory:', function(err){
-            if (err) {
-                reject(err.message);
-            }
-        });
-        resolve();
-    });
-}
-
 // close closes the current database connection
 module.exports.close = function() {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
         assert.ok(db, "Database not initialized, please call init().");
         switch(driver){
         case 'pg':
@@ -83,6 +89,11 @@ module.exports.close = function() {
                 resolve();
             });
             break;
+
+        case 'sqlite':
+            resolve();
+            break;
+
         default:
             reject('Unknown driver.');
         }

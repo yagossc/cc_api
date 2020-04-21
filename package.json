@@ -4,7 +4,7 @@
   "description": "An example credit card transaction based API.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "repository": {
     "type": "git",

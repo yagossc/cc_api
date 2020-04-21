@@ -1,5 +1,5 @@
 // Load the environment config
-const dotenv = require('dotenv');
+const dotenv = require('dotenv'); // FIXME: add a config module
 config = dotenv.config();
 if (config.error) {
     console.error(config.error);
@@ -13,7 +13,7 @@ system.graceful_shutdown();
 // Build all system's pieces
 // Initialize database;
 const db = require('./store/db');
-let db_up = db.init();
+let db_up = db.init(process.env.DB_DRIVER);
 
 // Execute migrations
 const migrations = require('./internal/migrations');

@@ -1,8 +1,9 @@
 const db = require('./db');
 const fees = require('../internal/fees');
 const withdraw = require('../internal/withdraw_date');
+const {v4: uuid} = require('uuid');
 
-module.exports.insert = function(transaction) {
+let insert = module.exports.insert = function(transaction) {
 
     query = `INSERT INTO
              transactions(transaction_id,
@@ -52,4 +53,27 @@ module.exports.find_all = function() {
                     transaction_disponivel
              FROM   transactions`;
     return db.query(query);
+}
+
+module.exports.mock = function() { // FIXME; do a proper test module
+
+    let transaction_disponivel = {
+        id:         uuid(),
+        nsu:        '0451456',
+        valor:      100,
+        bandeira:   'VISA',
+        modalidade: 'debito',
+        horario:    '1900-01-04T12:43:20-03:00'
+    };
+
+    let today = new Date().toString();
+    let transaction_receber = {
+        id:         uuid(),
+        nsu:        '0451456',
+        valor:      100,
+        bandeira:   'VISA',
+        modalidade: 'credito',
+        horario:    today
+    };
+    return insert(transaction_disponivel).then(() => insert(transaction_receber));
 }
