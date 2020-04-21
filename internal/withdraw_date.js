@@ -1,7 +1,9 @@
+// FIXME: promisify this module
+
 // get the available withdraw date for the transaction
 module.exports.get = function(date, modalidade) {
     var withdraw_date = new Date(date);
-    Date.prototype.add_days = function(days) {
+    Date.prototype.add_days = function(days) { // FIXME: do a proper dates module
         var withdraw_date = new Date(this.valueOf());
         withdraw_date.setDate(withdraw_date.getDate() + days);
         return withdraw_date;
