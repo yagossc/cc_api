@@ -14,7 +14,8 @@ module.exports.init = function(db_driver) {
         resolve();
     }).then(() => {
         new Promise((resolve, reject) => {
-            if(db_driver == 'pg'){
+            switch(db_driver){
+            case 'pg':
                 driver = 'pg';
                 db = new Client({
                     user:     process.env.DB_USER,
@@ -23,8 +24,9 @@ module.exports.init = function(db_driver) {
                     password: process.env.DB_PASS,
                     port:     process.env.DB_PORT,
                 });
-            }
-            if(db_driver == 'sqlite'){
+                break;
+
+            case 'sqlite':
                 driver = 'sqlite'
                 const sqlite3 = require('sqlite3').verbose();
                 db = new sqlite3.Database(':memory:', function(err){
@@ -32,6 +34,11 @@ module.exports.init = function(db_driver) {
                         reject(err.message);
                     }
                 });
+                break;
+
+            default:
+                reject('Unknown driver');
+
             }
             resolve();
         })
@@ -69,12 +76,6 @@ module.exports.query = function(query, params) {
             });
         });
     }
-}
-
-
-// mocks an in memory sqlite db for testing
-module.exports.mock = function(callback) {
-
 }
 
 // close closes the current database connection
