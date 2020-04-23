@@ -1,0 +1,48 @@
+version: '2'
+
+services:
+  postgres:
+    build:
+      context: ./dep/
+      dockerfile: postgres.dockerfile
+    env_file: ./dep/postgres.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+      - ./dep/postgresql.conf:/etc/postgresql/postgresql.conf
+    networks:
+      - eye_network
+
+  # adminer:
+  #   image: adminer
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "8000:8080"
+    # networks:
+    #   - eye_network
+
+  eye_build:
+    build:
+      context: ./dep/
+      dockerfile: node.dockerfile
+
+  eye_deploy:
+    build:
+      context: ../
+      dockerfile: ./docker/eye_api.dockerfile
+    volumes:
+      - ../:/app/src:rw
+    ports:
+      - "8080:8080"
+    command: ["node", "index.js"]
+    # command: ["tail", "-f", "/dev/null"]
+    networks:
+      - eye_network
+
+volumes:
+  dbdata:
+
+networks:
+    eye_network:

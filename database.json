@@ -3,7 +3,7 @@
         "driver": "pg",
         "user": "postgres",
         "password": "postgres",
-        "host": "localhost",
+        "host": "postgres",
         "database": "eyemobile",
         "port": "5432",
         "schema": "public"
@@ -20,7 +20,7 @@
         "driver": "pg",
         "user": "postgres",
         "password": "postgres",
-        "host": "localhost",
+        "host": "postgres",
         "database": "eyemobile",
         "port": "5432",
         "schema": "public"

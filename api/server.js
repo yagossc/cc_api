@@ -93,7 +93,7 @@ module.exports.run = function(port) {
 // close performs the server shutdown
 module.exports.close = function() {
     return new Promise(resolve => {
-    assert.ok(server, "Server not initialized, please call init().");
+        assert.ok(server, "Server not initialized, please call init().");
         server.conn.on('close', () => {
             console.log("Server disconnected.");
             resolve();

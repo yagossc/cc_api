@@ -6,7 +6,7 @@ const myformat = winston.format.printf(({ level, message, label, timestamp }) =>
 
 });
 
-module.exports.setup_logger = function() {
+module.exports.setup_logger = function() { // FIXME: do a proper logger module
     return express_winston.logger({
         transports: [
             new winston.transports.Console(),
