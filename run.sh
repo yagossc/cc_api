@@ -11,6 +11,27 @@ die() {
     exit 1
 }
 
+help(){
+    cat <<EOF
+  -- Application exec util script --
+
+    sh run.sh [-xvh] [server|tests]
+
+    OPTIONS:
+
+    -x  enable debugging.
+    -v  enable verbose.
+    -h  show help message and exit.
+
+    EXAMPLES
+
+    sh run.sh -x server
+    sh run.sh -v tests
+
+EOF
+    exit 0
+}
+
 # exec command in the container (docker exec wrapper)
 docker_exec() {
     # docker options
@@ -25,16 +46,18 @@ docker_exec() {
     docker exec ${_flags} ${_container} sh -c "${_command}"
 }
 
+# install projects dependencies
 install_deps(){
     docker_exec "" "${_container}" "${_deps_cmd}"
-
 }
 
+# start the server
 run_server(){
     install_deps
     docker_exec "-d" "${_container}" "${_start_cmd}"
 }
 
+# run automated(jest) tests
 run_tests(){
     install_deps
     docker_exec "" "${_container}" "${_test_cmd}"
@@ -53,6 +76,9 @@ parse_opts(){
             # set debug and verbose
             -v) shift 1; set -v ;;
             -x) shift 1; set -x ;;
+
+            # print help
+            -h) help ;;
 
             # run server
             server) run_server ;;
