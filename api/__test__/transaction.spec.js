@@ -45,7 +45,7 @@ describe("POST /transaction", function(){
             });
     });
 
-    it("returns an invalid input error", async function(done){
+    it("returns an invalid 'nsu' error", async function(done){
 
         let app = server.get().app;
         request(app).
@@ -56,6 +56,45 @@ describe("POST /transaction", function(){
                 nsu: "",
             }).
             expect(400, { message: "Invalid 'NSU' for transaction." }).
+            end(function(err, res){
+                console.log(res.body);
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it("returns an invalid 'valor' error", async function(done){
+
+        let app = server.get().app;
+        request(app).
+            post('/transaction').
+            set('Accept', 'application/json').
+            expect('Content-Type', /json/).
+            send({
+                nsu: "1234",
+                valor: -1,
+            }).
+            expect(400, { message: "Invalid 'valor' for transaction." }).
+            end(function(err, res){
+                console.log(res.body);
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it("returns an invalid 'bandeira' error", async function(done){
+
+        let app = server.get().app;
+        request(app).
+            post('/transaction').
+            set('Accept', 'application/json').
+            expect('Content-Type', /json/).
+            send({
+                nsu: "1234",
+                valor: 123,
+                bandeira: "nope",
+            }).
+            expect(400, { message: "Invalid 'bandeira' for transaction." }).
             end(function(err, res){
                 console.log(res.body);
                 if (err) return done(err);

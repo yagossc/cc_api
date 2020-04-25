@@ -1,41 +1,42 @@
 {
-  "name": "eye_api",
-  "version": "1.0.0",
-  "description": "An example credit card transaction based API.",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest --runInBand"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yagossc/eye_api.git"
-  },
-  "keywords": [
-    "nodejs",
-    "express",
-    "swagger",
-    "postgresql"
-  ],
-  "author": "yagossc",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/yagossc/eye_api/issues"
-  },
-  "homepage": "https://github.com/yagossc/eye_api#readme",
-  "dependencies": {
-    "db-migrate": "^0.11.6",
-    "db-migrate-pg": "^1.0.0",
-    "db-migrate-sqlite3": "^0.4.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-winston": "^4.0.3",
-    "jest": "^25.2.3",
-    "lodash": "^4.17.15",
-    "pg": "^7.18.2",
-    "supertest": "^4.0.2",
-    "swagger-jsdoc": "^4.0.0",
-    "swagger-ui-express": "^4.1.4",
-    "uuid": "^7.0.2",
-    "winston": "^3.2.1"
-  }
+    "name": "eye_api",
+    "version": "1.0.0",
+    "description": "An example credit card transaction based API.",
+    "main": "index.js",
+    "scripts": {
+        "start": "sh run.sh",
+        "test": "jest --runInBand"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/yagossc/eye_api.git"
+    },
+    "keywords": [
+        "nodejs",
+        "express",
+        "swagger",
+        "postgresql"
+    ],
+    "author": "yagossc",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/yagossc/eye_api/issues"
+    },
+    "homepage": "https://github.com/yagossc/eye_api#readme",
+    "dependencies": {
+        "db-migrate": "^0.11.6",
+        "db-migrate-pg": "^1.0.0",
+        "db-migrate-sqlite3": "^0.4.0",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-winston": "^4.0.3",
+        "jest": "^25.2.3",
+        "lodash": "^4.17.15",
+        "pg": "^7.18.2",
+        "supertest": "^4.0.2",
+        "swagger-jsdoc": "^4.0.0",
+        "swagger-ui-express": "^4.1.4",
+        "uuid": "^7.0.2",
+        "winston": "^3.2.1"
+    }
 }
