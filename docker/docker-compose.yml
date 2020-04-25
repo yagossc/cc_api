@@ -36,8 +36,8 @@ services:
       - ../:/app/src:rw
     ports:
       - "8080:8080"
-    command: ["node", "index.js"]
-    # command: ["tail", "-f", "/dev/null"]
+    # command: ["node", "index.js"]
+    command: ["tail", "-f", "/dev/null"]
     networks:
       - eye_network
 
