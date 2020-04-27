@@ -1,6 +1,6 @@
 const db = require('./db');
 const fees = require('../internal/fees');
-const withdraw = require('../internal/withdraw_date');
+const withdraw = require('../internal/withdrawDate');
 const {v4: uuid} = require('uuid');
 
 let insert = module.exports.insert = function(transaction) {
@@ -28,7 +28,7 @@ let insert = module.exports.insert = function(transaction) {
     return db.query(query, params);
 }
 
-module.exports.find_by_id = function(id) {
+module.exports.findByID = function(id) {
     query = `SELECT transaction_id,
                     transaction_nsu,
                     transaction_valor,
@@ -42,7 +42,7 @@ module.exports.find_by_id = function(id) {
     return db.query(query, [id]);
 }
 
-module.exports.find_all = function() {
+module.exports.findAll = function() {
     query = `SELECT transaction_id,
                     transaction_nsu,
                     transaction_valor,

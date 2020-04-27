@@ -1,11 +1,11 @@
-const transactions_store = require('../store/transaction');
-const balance_dto = require('./balance_dto');
+const store = require('../store/transaction');
+const dto = require('./balanceDTO');
 
 // GET /balance
-module.exports.get_balance = async function(req, res, next) {
+module.exports.getBalance = async function(req, res, next) {
     try{
-        let transactions = await transactions_store.find_all();
-        let balance = await balance_dto.calculate(transactions.rows);
+        let transactions = await store.findAll();
+        let balance = await dto.calculate(transactions.rows);
 
         res.json(balance);
     }catch(err){

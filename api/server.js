@@ -3,9 +3,9 @@ const http   = require('http');
 const assert = require('assert');
 
 // Middlewares
-const logger           = require('../internal/logger').setup_logger();
-const notfound         = require('../internal/not_found');
-const error_middleware = require('../app/errors');
+const logger           = require('../internal/logger').setup();
+const notfound         = require('../internal/notfound');
+const errorMiddleware = require('../app/errors');
 
 // API Routes
 const routes = require('./routes');
@@ -20,7 +20,7 @@ app.use(express.urlencoded({extended:true}));
 const swaggerui  = require('swagger-ui-express');
 const swaggerdoc = require('swagger-jsdoc');
 
-const swagger_options = {
+const swaggerOptions = {
     swaggerDefinition: {
         info: {
             title: 'eye_api',
@@ -32,7 +32,7 @@ const swagger_options = {
     apis: ['./api/routes.js']
 }
 
-const swagger_specs = swaggerdoc(swagger_options);
+const swaggerSpecs = swaggerdoc(swaggerOptions);
 
 var server;
 
@@ -50,7 +50,7 @@ module.exports.init = function(){
 
         // Setup swagger documentation
         server.app.use('/api-docs', swaggerui.serve,
-                       swaggerui.setup(swagger_specs));
+                       swaggerui.setup(swaggerSpecs));
 
         // Setup and use logger
         server.app.use(logger);
@@ -62,7 +62,7 @@ module.exports.init = function(){
         server.app.use(notfound.handler);
 
         // Setup error middleware
-        server.app.use(error_middleware.handler);
+        server.app.use(errorMiddleware.handler);
 
         resolve();
 

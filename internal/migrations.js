@@ -1,12 +1,12 @@
-const db_migrate = require('db-migrate');
+const dbMigrate = require('db-migrate');
 const path = require('path');
 
-module.exports.exec_migrations = function(driver, scope) {
+module.exports.execMigrations = function(driver, scope) {
     let options = {}
     switch(driver){
     case 'pg':
         options.env = 'pg';
-        dbm = db_migrate.getInstance(true, options);
+        dbm = dbMigrate.getInstance(true, options);
         return dbm.up('','postgres');
         break;
 

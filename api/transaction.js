@@ -1,15 +1,15 @@
-const transaction_dto = require('./transaction_dto');
-const transaction_model = require('../app/transaction');
-const transaction_store = require('../store/transaction');
+const dto = require('./transactionDTO');
+const model = require('../app/transaction');
+const store = require('../store/transaction');
 const valid = require('./valid');
 const {v4: uuid} = require('uuid');
 
 // POST /transaction handler function
-module.exports.insert_transaction = async function(req, res, next) {
-    incoming = transaction_model.sanitize(req.body);
+module.exports.insertTransaction = async function(req, res, next) {
+    incoming = model.sanitize(req.body);
 
     // Input validations Promise
-    var validate_input = new Promise(function(resolve, reject){
+    var validateInput = new Promise(function(resolve, reject){
         try {
             if (!incoming.nsu) {
                 throw new Error('invalid.nsu');
@@ -34,11 +34,11 @@ module.exports.insert_transaction = async function(req, res, next) {
 
 
     try {
-        await validate_input; incoming.id = uuid();
-        await transaction_store.insert(incoming)
-        let result_transaction = await transaction_store.find_by_id(incoming.id);
-        let response_transaction = await transaction_dto.one(result_transaction.rows[0]);
-        res.json(response_transaction);
+        await validateInput; incoming.id = uuid();
+        await store.insert(incoming)
+        let resultTransaction = await store.findByID(incoming.id);
+        let responseTransaction = await dto.one(resultTransaction.rows[0]);
+        res.json(responseTransaction);
 
     }catch(err){
         console.error('Error: '+err.message);
@@ -47,11 +47,11 @@ module.exports.insert_transaction = async function(req, res, next) {
 }
 
 // GET /transaction handler function
-module.exports.get_all_transactions = async function(req, res, next) {
+module.exports.getAll = async function(req, res, next) {
     try{
-        let transactions = await transaction_store.find_all();
-        let res_transactions = await transaction_dto.many(transactions.rows);
-        res.json(res_transactions);
+        let transactions = await store.findAll();
+        let resTransactions = await dto.many(transactions.rows);
+        res.json(resTransactions);
     }catch(err){
         console.error('Error: '+err.message);
         next(err);

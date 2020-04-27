@@ -2,7 +2,7 @@ const request = require('supertest');
 const server = require('../server');
 const db = require('../../store/db');
 
-let valid_transaction = {
+let validTransaction = {
     nsu:        '0451456',
     valor:      79.99,
     bandeira:   'VISA',
@@ -10,7 +10,7 @@ let valid_transaction = {
     horario:    '2019-01-04T12:43:20-03:00'
 };
 
-let result_transaction = {
+let resultTransaction = {
     nsu: '0451456',
     valor: 79.99,
     liquido: 77.59,
@@ -26,7 +26,7 @@ describe("POST /transaction", function(){
         await db.init('sqlite');
 
         const migrations = require('../../internal/migrations');
-        await migrations.exec_migrations('sqlite', 'sqlite');
+        await migrations.execMigrations('sqlite', 'sqlite');
 
         await server.init();
 
@@ -36,8 +36,8 @@ describe("POST /transaction", function(){
             post('/transaction').
             set('Accept', 'application/json').
             expect('Content-Type', /json/).
-            send(valid_transaction).
-            expect(200, result_transaction).
+            send(validTransaction).
+            expect(200, resultTransaction).
             end(function(err, res){
                 console.log(res.body);
                 if (err) return done(err);
@@ -111,7 +111,7 @@ describe("GET /transaction", function(){
             get('/transaction').
             set('Accept', 'application/json').
             expect('Content-Type', /json/).
-            expect(200, [result_transaction]).
+            expect(200, [resultTransaction]).
             end(function(err, res){
                 console.log(res.body);
                 if (err) return done(err);

@@ -8,30 +8,32 @@ if (config.error) {
 
 // Lock graceful shutdown routine
 const system = require('./internal/system');
-system.graceful_shutdown();
+system.gracefulShutdown();
 
-// Build all system's pieces
+/**
+ Build all system's pieces
+**/
 // Initialize database;
 const db = require('./store/db');
-let db_up = db.init(process.env.DB_DRIVER);
+let dbRun = db.init(process.env.DB_DRIVER);
 
 // Execute migrations
 const migrations = require('./internal/migrations');
-let migrate = migrations.exec_migrations('pg', 'postgres');
+let migrate = migrations.execMigrations('pg', 'postgres');
 
 // Setup and Start server
 const server = require('./api/server');
-let run_server = server.init().then(() => {
+let runServer = server.init().then(() => {
     server.run(process.env.TAPI_PORT);
 });
 
 // System going up event chain
-db_up.then( () => {
+dbRun.then( () => {
     console.log('Connected to DB.');
     return migrate;
 }).then(() => {
     console.log("Migrations ok.");
-    return run_server;
+    return runServer;
 }).then(() => {
     console.log('Server up and running. Listenning at '+ process.env.TAPI_PORT);
 }).catch(err => {

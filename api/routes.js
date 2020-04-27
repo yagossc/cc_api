@@ -99,7 +99,7 @@ module.exports.setup = function(app) {
      *           items:
      *             $ref: '#/definitions/Transaction'
      */
-    app.get('/transaction', t.get_all_transactions);
+    app.get('/transaction', t.getAll);
 
     /**
      * @swagger
@@ -122,7 +122,7 @@ module.exports.setup = function(app) {
      *           type: object
      *           $ref: '#/definitions/Transaction'
      */
-    app.post('/transaction', t.insert_transaction);
+    app.post('/transaction', t.insertTransaction);
 
     /**
      * @swagger
@@ -138,5 +138,5 @@ module.exports.setup = function(app) {
      *           type: object
      *           $ref: '#/definitions/Balance'
      */
-    app.get('/balance', b.get_balance);
+    app.get('/balance', b.getBalance);
 }

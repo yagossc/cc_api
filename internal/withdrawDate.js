@@ -2,19 +2,19 @@
 
 // get the available withdraw date for the transaction
 module.exports.get = function(date, modalidade) {
-    var withdraw_date = new Date(date);
-    Date.prototype.add_days = function(days) { // FIXME: do a proper dates module
-        var withdraw_date = new Date(this.valueOf());
-        withdraw_date.setDate(withdraw_date.getDate() + days);
-        return withdraw_date;
+    var withdrawDate = new Date(date);
+    Date.prototype.addDays = function(days) { // FIXME: do a proper dates module
+        var withdrawDate = new Date(this.valueOf());
+        withdrawDate.setDate(withdrawDate.getDate() + days);
+        return withdrawDate;
     }
 
-    withdraw_date = modalidade == 'debito' ? next_business_day(withdraw_date.add_days(1)) : next_business_day(withdraw_date.add_days(30));
-    return format_yyyy_mm_dd(withdraw_date);
+    withdrawDate = modalidade == 'debito' ? nextBusinessDay(withdrawDate.addDays(1)) : nextBusinessDay(withdrawDate.addDays(30));
+    return formatDate(withdrawDate);
 }
 
 // format the output date as yyyy-mm-dd
-var format_yyyy_mm_dd = function(date) {
+var formatDate = function(date) {
     // Ensure day 2-digit
     let fmtday = date.getDate().toString();
     fmtday.length == 1 ? fmtday = '0'+fmtday : fmtday;
@@ -27,15 +27,15 @@ var format_yyyy_mm_dd = function(date) {
 }
 
 // calculates the next business day for given date
-var next_business_day = function(date) {
+var nextBusinessDay = function(date) {
     var day = date.getDay();
 
     switch(day){
     case 0:
-        return date.add_days(1);
+        return date.addDays(1);
         break;
     case 6:
-        return date.add_days(2);
+        return date.addDays(2);
         break;
     default:
         return date;

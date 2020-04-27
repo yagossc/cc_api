@@ -1,6 +1,6 @@
 // handler is the custom error handler for the api/express
 module.exports.handler = function(err, req, res, next) {
-    var error_codes = new Map([
+    var errorCodes = new Map([
         ["invalid.nsu", "Invalid 'NSU' for transaction."],
         ["invalid.valor", "Invalid 'valor' for transaction."],
         ["invalid.bandeira", "Invalid 'bandeira' for transaction."],
@@ -9,9 +9,9 @@ module.exports.handler = function(err, req, res, next) {
     ]);
 
     // Send 'Bad Request' status
-    let err_message = "Internal Server Error";
+    let errMessage = "Internal Server Error";
     let code = 400;
-    error_codes.has(err.message) ? err_message = error_codes.get(err.message) : code = 500;
+    errorCodes.has(err.message) ? errMessage = errorCodes.get(err.message) : code = 500;
     res.status(code);
-    res.json({ message: err_message });
+    res.json({ message: errMessage });
 }
