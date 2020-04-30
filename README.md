@@ -51,3 +51,7 @@ Again, if you prefer using docker, there's a convenient script:
 $ sh run.sh -h
 $ sh run.sh tests
 ```
+
+# Documentation
+
+The API documentation was built with Swagger and can be viewed at **'http://served.ip:8080/api-docs/'**

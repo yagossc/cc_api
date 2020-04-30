@@ -10,9 +10,6 @@ if (config.error) {
 const system = require('./internal/system');
 system.gracefulShutdown();
 
-/**
- Build all system's pieces
-**/
 // Initialize database;
 const db = require('./store/db');
 let dbRun = db.init(process.env.DB_DRIVER);

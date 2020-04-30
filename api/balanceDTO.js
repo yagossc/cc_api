@@ -9,7 +9,7 @@ module.exports.calculate = function(transactions) {
 
         let today = new Date();
 
-        transactions.forEach(function(item){
+        transactions.forEach(item => {
             let disponivel = new Date(item.transaction_disponivel);
             if (disponivel < today) balance.disponivel+=item.transaction_liquido;
             else balance.receber+=item.transaction_liquido;
