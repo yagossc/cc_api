@@ -35,7 +35,7 @@ module.exports.insertTransaction = async function(req, res, next) {
 
     try {
         await validateInput; incoming.id = uuid();
-        await store.insert(incoming)
+        await store.insert(incoming);
         let resultTransaction = await store.findByID(incoming.id);
         let responseTransaction = await dto.one(resultTransaction.rows[0]);
         res.json(responseTransaction);

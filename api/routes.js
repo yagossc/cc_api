@@ -65,7 +65,7 @@ module.exports.setup = function(app) {
      *     produces:
      *      - application/json
      *     parameters:
-     *      - name: username
+     *      - name: name
      *        in: formData
      *        description: The user's name.
      *        required: true
@@ -139,4 +139,8 @@ module.exports.setup = function(app) {
      *           $ref: '#/definitions/Balance'
      */
     app.get('/balance', b.getBalance);
+
+    // app.route('*').all(function(req, res){
+    //     res.sendStatus(405);
+    // });
 }

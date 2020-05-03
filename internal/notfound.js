@@ -3,7 +3,7 @@ module.exports.handler = function(req, res, next){
 
     // respond with html page
     if (req.accepts('html')) {
-        res.render('404', { url: req.url });
+        res.send('<html><head></head><body><h1>Not fucking found.</h1></body></html>')
         return;
     }
 
@@ -15,4 +15,5 @@ module.exports.handler = function(req, res, next){
 
     // default to plain-text. send()
     res.type('txt').send('Not found');
+
 }

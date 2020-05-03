@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 
-module.exports.sign = function(user) {
+module.exports.sign = function(claims) {
     return new Promise((resolve, reject) => {
-        jswt.sign(user, process.env.JWT_SECRET, function(err, token){
+        jwt.sign(claims, process.env.JWT_SECRET, function(err, token){
             if (err) reject(err);
             resolve(token);
         });
