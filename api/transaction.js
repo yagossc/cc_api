@@ -9,7 +9,7 @@ module.exports.insertTransaction = async function(req, res, next) {
     incoming = model.sanitize(req.body);
 
     // Input validations Promise
-    var validateInput = new Promise(function(resolve, reject){
+    var validateInput = new Promise((resolve, reject) => {
         try {
             if (!incoming.nsu) {
                 throw new Error('invalid.nsu');
