@@ -7,6 +7,10 @@ var schemas = {
         modalidade: null,
         horario:    null,
         disponivel: null
+    },
+    user: {
+        name:     null,
+        password: null
     }
 }
 
