@@ -24,19 +24,27 @@ module.exports.insertUser = async function(req, res, next) {
     });
 
     try {
-        await validateInput; incoming.id = uuid();
+        await validations; incoming.id = uuid();
+        let checkExistingUser = await store.findByName(incoming.name);
+        if (checkExistingUser.rows.length != 0) {
+            throw new Error('invalid.credentials');
+        }
+
         await store.insert(incoming);
         let insertedUser = await store.findByID(incoming.id);
-        res.json({message: `User '${insertedUser.user_name}' created.`});
+        if (insertedUser.rows.length == 0) {
+            throw new Error('insertion.error');
+        }
+
+        res.json({message: `User '${insertedUser.rows[0].user_name}' created.`});
     }catch(err){
+        console.error('Error: '+err.message);
         next(err);
     }
 }
 
 module.exports.login =  async function(req, res, next) {
-    console.log(req.body);
     incoming = model.sanitize(req.body);
-    console.log(incoming)
 
     // Input validations Promise
     var validations = new Promise((resolve, reject) => {
@@ -52,9 +60,13 @@ module.exports.login =  async function(req, res, next) {
 
     try {
         await validations;
-        let user = await store.findByName(incoming.name);
+        let queryResult = await store.findByName(incoming.name);
+        if (queryResult.rows.length == 0) {
+           throw new Error('invalid.credentials')
+        }
+
+        let user = queryResult.rows[0];
         let hashPassword = await hash.newHexHash(incoming.password);
-        console.log("User retrieved: "+JSON.stringify(user));
 
         if (hashPassword != user.user_pwd) {
             throw new Error('invalid.credentials')

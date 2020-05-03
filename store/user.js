@@ -2,12 +2,13 @@ const db = require('./db');
 const hash = require('../internal/hash');
 const {v4: uuid} = require('uuid');
 
-module.exports.insert = function(user) {
+module.exports.insert = async function(user) {
 
     query = `INSERT INTO user_account(user_id, user_name, user_pwd)
              VALUES ($1, $2, $3)`;
 
-    hashPassword = hash.newHexHash(user.password);
+    hashPassword = await hash.newHexHash(user.password);
+    console.log("Hash: "+hashPassword);
 
     const params = [user.id, user.name, hashPassword];
 

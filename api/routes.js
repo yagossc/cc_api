@@ -59,9 +59,33 @@ module.exports.setup = function(app) {
 
     /**
      * @swagger
+     * /user:
+     *   post:
+     *     description: Sign up route
+     *     produces:
+     *      - application/json
+     *     parameters:
+     *      - name: name
+     *        in: formData
+     *        description: The user's name.
+     *        required: true
+     *        type: string
+     *      - name: password
+     *        in: formData
+     *        description: The user's password.
+     *        required: true
+     *        type: string
+     *     responses:
+     *       200:
+     *         description: A message containing the signed user's name.
+     */
+    app.post('/user', u.insertUser);
+
+    /**
+     * @swagger
      * /login:
      *   post:
-     *     description: Returns users
+     *     description: Authorizes a known user
      *     produces:
      *      - application/json
      *     parameters:

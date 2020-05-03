@@ -14,14 +14,14 @@ services:
     networks:
       - cc_network
 
-  # adminer:
-  #   image: adminer
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - "8000:8080"
-    # networks:
-    #   - cc_network
+  adminer:
+    image: adminer
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8080"
+    networks:
+      - cc_network
 
   cc_build:
     build:
