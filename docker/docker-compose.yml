@@ -12,7 +12,7 @@ services:
       - "dbdata:/var/lib/postgresql/data"
       - ./dep/postgresql.conf:/etc/postgresql/postgresql.conf
     networks:
-      - eye_network
+      - cc_network
 
   # adminer:
   #   image: adminer
@@ -21,28 +21,36 @@ services:
   #   ports:
   #     - "8000:8080"
     # networks:
-    #   - eye_network
+    #   - cc_network
 
-  eye_build:
+  cc_build:
     build:
       context: ./dep/
       dockerfile: node.dockerfile
 
-  eye_deploy:
+  cc_tests:
     build:
       context: ../
-      dockerfile: ./docker/eye_api.dockerfile
+      dockerfile: ./docker/cc_api.dockerfile
+    volumes:
+      - ../:/app/src:rw
+    command: ["npm", "run", "test"]
+
+  cc_deploy:
+    build:
+      context: ../
+      dockerfile: ./docker/cc_api.dockerfile
     volumes:
       - ../:/app/src:rw
     ports:
       - "8080:8080"
-    # command: ["node", "index.js"]
-    command: ["tail", "-f", "/dev/null"]
+    command: ["node", "index.js"]
+    # command: ["tail", "-f", "/dev/null"]
     networks:
-      - eye_network
+      - cc_network
 
 volumes:
   dbdata:
 
 networks:
-    eye_network:
+    cc_network:
