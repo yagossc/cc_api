@@ -9,20 +9,21 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/yagossc/eye_api.git"
+        "url": "git+https://github.com/yagossc/cc_api.git"
     },
     "keywords": [
         "nodejs",
         "express",
         "swagger",
-        "postgresql"
+        "postgresql",
+        "jest"
     ],
     "author": "yagossc",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/yagossc/eye_api/issues"
+        "url": "https://github.com/yagossc/cc_api/issues"
     },
-    "homepage": "https://github.com/yagossc/eye_api#readme",
+    "homepage": "https://github.com/yagossc/cc_api#readme",
     "dependencies": {
         "db-migrate": "^0.11.6",
         "db-migrate-pg": "^1.0.0",
@@ -31,6 +32,7 @@
         "express": "^4.17.1",
         "express-winston": "^4.0.3",
         "jest": "^25.2.3",
+        "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.15",
         "pg": "^7.18.2",
         "supertest": "^4.0.2",
