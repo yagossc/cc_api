@@ -1,5 +1,7 @@
 #!/bin/sh
 
+_file="./docker/docker-compose.yml"
+_service="eye_deploy"
 _container="docker_eye_deploy_1"
 _deps_cmd="npm install"
 _start_cmd="node index.js"
@@ -33,7 +35,7 @@ EOF
 }
 
 # exec command in the container (docker exec wrapper)
-docker_exec() {
+docker_compose_exec() {
     # docker options
     local _flags=$1
     local _container=$2
@@ -43,24 +45,26 @@ docker_exec() {
     # show message
 
     # execute the commmand
-    docker exec ${_flags} ${_container} sh -c "${_command}"
+    docker-compose -f $_file exec -d \
+                   $_service \
+                   sh -c "${_command}"
 }
 
 # install projects dependencies
 install_deps(){
-    docker_exec "" "${_container}" "${_deps_cmd}"
+    docker_compose_exec "" "${_container}" "${_deps_cmd}"
 }
 
 # start the server
 run_server(){
     install_deps
-    docker_exec "-d" "${_container}" "${_start_cmd}"
+    docker_compose_exec "-d" "${_container}" "${_start_cmd}"
 }
 
 # run automated(jest) tests
 run_tests(){
     install_deps
-    docker_exec "" "${_container}" "${_test_cmd}"
+    docker_compose_exec "" "${_container}" "${_test_cmd}"
 }
 
 
