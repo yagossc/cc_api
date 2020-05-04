@@ -8,7 +8,7 @@ module.exports.setup = function(app) {
      * definitions:
      *   User:
      *     properties:
-     *       username:
+     *       name:
      *         type: string
      *       password:
      *         type: string
@@ -66,15 +66,10 @@ module.exports.setup = function(app) {
      *      - application/json
      *     parameters:
      *      - name: name
-     *        in: formData
-     *        description: The user's name.
-     *        required: true
-     *        type: string
-     *      - name: password
-     *        in: formData
-     *        description: The user's password.
-     *        required: true
-     *        type: string
+     *        in: body
+     *        schema:
+     *           type: object
+     *           $ref: '#/definitions/User'
      *     responses:
      *       200:
      *         description: A message containing the signed user's name.

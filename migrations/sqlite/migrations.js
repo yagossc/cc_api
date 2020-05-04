@@ -17,6 +17,14 @@ module.exports.up = async function(db) {
     migrations[2] = `ALTER TABLE transactions
                      ADD COLUMN transaction_disponivel TEXT;`
 
+    migrations[3] = `CREATE TABLE user_account (
+                       user_id UUID NOT NULL,
+                       user_name TEXT NOT NULL,
+                       user_pwd VARCHAR(64) NOT NULL,
+
+                       CONSTRAINT pk_user PRIMARY KEY (user_id)
+                     );`
+
     for(let i = 0; i < migrations.length; i++){
         await run_migration(db, migrations[i]);
         console.log("Migration["+i+"] ok.");
