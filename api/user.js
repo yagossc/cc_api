@@ -62,14 +62,14 @@ module.exports.login =  async function(req, res, next) {
         await validations;
         let queryResult = await store.findByName(incoming.name);
         if (queryResult.rows.length == 0) {
-           throw new Error('invalid.credentials')
+            throw new Error('invalid.credentials');
         }
 
         let user = queryResult.rows[0];
         let hashPassword = await hash.newHexHash(incoming.password);
 
         if (hashPassword != user.user_pwd) {
-            throw new Error('invalid.credentials')
+            throw new Error('invalid.credentials');
         }
         // Generate token
         let jwtToken = await jwt.sign({authorized: true});

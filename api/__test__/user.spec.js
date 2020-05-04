@@ -27,4 +27,42 @@ describe("POST /user", function(){
                 done();
             });
     })
+
+    it("returns an invalid user param error", async function(done){
+        let app = server.get().app;
+        let expected = { message: 'Invalid name.' }
+
+        request(app).
+            post('/user').
+            set('Accept', 'application/json').
+            expect('Content-Type', /json/).
+            send({name: ''}).
+            expect(400, expected).
+            end(function(err, res){
+                console.log(res.body);
+                if (err) return done(err);
+                done();
+            });
+    })
 });
+
+describe("POST /login", function(){
+    it("sign in", async function(done){
+        let app = server.get().app;
+        let validUser = {name: 'test', password: 'user'}
+
+        process.env.JWT_SECRET = 'testSecret';
+
+        request(app).
+            post('/login').
+            set('Accept', 'application/json').
+            expect('Content-Type', /json/).
+            send(validUser).
+            expect(200).
+            end(function(err, res){
+                console.log(res.body);
+                if (err) return done(err);
+                done();
+            });
+    })
+})

@@ -7,9 +7,7 @@ module.exports.insert = async function(user) {
     query = `INSERT INTO user_account(user_id, user_name, user_pwd)
              VALUES ($1, $2, $3)`;
 
-    hashPassword = await hash.newHexHash(user.password);
-    console.log("Hash: "+hashPassword);
-
+    let hashPassword = await hash.newHexHash(user.password);
     const params = [user.id, user.name, hashPassword];
 
     return db.query(query, params);
