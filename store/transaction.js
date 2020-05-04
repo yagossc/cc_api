@@ -55,7 +55,7 @@ module.exports.findAll = function() {
     return db.query(query);
 }
 
-module.exports.mock = function() { // FIXME; do a proper test module
+module.exports.mock = function() { // FIXME: do a proper test module
 
     let transaction_disponivel = {
         id:         uuid(),
