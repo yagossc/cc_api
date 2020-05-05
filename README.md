@@ -16,8 +16,8 @@ and run:
 
 **With docker:**
 ```
-$ docker exec docker_eye_deploy_1 sh -c "npm install"
-$ docker exec -itd docker_eye_deploy_1 sh -c "npm start"
+$ docker exec docker_cc_deploy_1 sh -c "npm install"
+$ docker exec -itd docker_cc_deploy_1 sh -c "npm start"
 ```
 
 **Locally:**
@@ -38,7 +38,7 @@ Same as before, you can either do this locally or in a cotainer:
 
 **Docker:**
 ```
-$ docker exec docker_eye_deploy_1 sh -c "npm run test"
+$ docker exec docker_cc_deploy_1 sh -c "npm run test"
 ```
 
 **Local:**

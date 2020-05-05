@@ -1,5 +1,5 @@
 {
-    "name": "eye_api",
+    "name": "cc_api",
     "version": "1.0.0",
     "description": "An example credit card transaction based API.",
     "main": "index.js",

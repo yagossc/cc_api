@@ -1,8 +1,8 @@
 #!/bin/sh
 
 _file="./docker/docker-compose.yml"
-_service="eye_deploy"
-_container="docker_eye_deploy_1"
+_service="cc_deploy"
+_container="docker_cc_deploy_1"
 _deps_cmd="npm install"
 _start_cmd="node index.js"
 _test_cmd="npm run test"

@@ -23,7 +23,7 @@ const swaggerdoc = require('swagger-jsdoc');
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            title: 'eye_api',
+            title: 'cc_api',
             version: '1.0.0',
             description: 'An example credit card transaction based API.',
         },
