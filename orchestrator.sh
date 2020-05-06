@@ -15,18 +15,26 @@ help(){
     cat <<EOF
   -- Application exec util script --
 
-    sh run.sh [-xvh] [server|tests]
+    sh orchestrator.sh [-xvh] [build|play|stop|conduct] -s SERVICE_NAME
 
     OPTIONS:
 
-    -x  enable debugging.
-    -v  enable verbose.
-    -h  show help message and exit.
+    -x        enable debugging.
+    -v        enable verbose.
+    -h|help   show help message and exit.
+
+    -s        set target service
+
+    build     builds a target composition service
+    play      runs a target composition service
+    stop      stops a target composition service
+    conduct   builds and runs all composition services
 
     EXAMPLES
 
-    sh run.sh -x server
-    sh run.sh -v tests
+    sh orchestrator.sh -x stop -s cc_deploy
+    sh orchestrator.sh -v play -s postgresql
+    sh orchestrator.sh -xv conduct
 
 EOF
     exit 0
