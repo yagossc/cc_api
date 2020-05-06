@@ -1,3 +1,5 @@
+// FIXME: this code could e in a single place
+// if the schemas were better structured
 const _ = require("lodash");
 const schemas = require("./schemas");
 

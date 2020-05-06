@@ -5,7 +5,8 @@ const assert = require('assert');
 // Middlewares
 const logger           = require('../internal/logger').setup();
 const notfound         = require('../internal/notfound');
-const errorMiddleware = require('../app/errors');
+const auth             = require('../internal/auth');
+const errorMiddleware  = require('../app/errors');
 
 // API Routes
 const routes = require('./routes');
@@ -52,8 +53,17 @@ module.exports.init = function(){
         server.app.use('/api-docs', swaggerui.serve,
                        swaggerui.setup(swaggerSpecs));
 
+
         // Setup and use logger
         server.app.use(logger);
+
+        // Attach authentication validator middleware
+        server.app.use(function(req, res, next){
+            console.log(req.method);
+            next();
+        });
+
+        server.app.use(auth.validator);
 
         // Setup routes
         routes.setup(server.app);
