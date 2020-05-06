@@ -3,6 +3,7 @@ const server = require('../server');
 const db = require('../../store/db');
 const migrations = require('../../internal/migrations');
 const store = require('../../store/user');
+process.env.DISABLE_AUTH=true;
 
 describe("POST /user", function(){ // FIXME: make better use of Jest
     it("inserts a new user", async function(done){
