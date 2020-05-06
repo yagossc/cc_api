@@ -6,6 +6,10 @@ module.exports.handler = function(err, req, res, next) {
         ["invalid.bandeira", "Invalid 'bandeira' for transaction."],
         ["invalid.modalidade", "Invalid 'modalidade' for transaction."],
         ["invalid.horario", "Invalid 'horario' for transaction."],
+        ["invalid.name", "Invalid name."],
+        ["invalid.password", "Invalid password."],
+        ["invalid.credentials", "Invalid credentials. Please, try again, or not."],
+        ["auth.error", "Authorization error. Please, try again, or not."],
     ]);
 
     // Send 'Bad Request' status

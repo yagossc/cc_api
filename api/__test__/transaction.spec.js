@@ -1,6 +1,7 @@
 const request = require('supertest');
 const server = require('../server');
 const db = require('../../store/db');
+process.env.DISABLE_AUTH=true;
 
 let validTransaction = {
     nsu:        '0451456',

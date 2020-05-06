@@ -8,7 +8,7 @@ module.exports.setup = function(app) {
      * definitions:
      *   User:
      *     properties:
-     *       username:
+     *       name:
      *         type: string
      *       password:
      *         type: string
@@ -59,13 +59,32 @@ module.exports.setup = function(app) {
 
     /**
      * @swagger
-     * /login:
+     * /user:
      *   post:
-     *     description: Returns users
+     *     description: Sign up route
      *     produces:
      *      - application/json
      *     parameters:
-     *      - name: username
+     *      - name: name
+     *        in: body
+     *        schema:
+     *           type: object
+     *           $ref: '#/definitions/User'
+     *     responses:
+     *       200:
+     *         description: A message containing the signed user's name.
+     */
+    app.post('/user', u.insertUser);
+
+    /**
+     * @swagger
+     * /login:
+     *   post:
+     *     description: Authorizes a known user
+     *     produces:
+     *      - application/json
+     *     parameters:
+     *      - name: name
      *        in: formData
      *        description: The user's name.
      *        required: true
@@ -139,4 +158,8 @@ module.exports.setup = function(app) {
      *           $ref: '#/definitions/Balance'
      */
     app.get('/balance', b.getBalance);
+
+    // app.route('*').all(function(req, res){
+    //     res.sendStatus(405);
+    // });
 }

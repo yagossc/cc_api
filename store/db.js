@@ -5,7 +5,7 @@ let db;
 let driver;
 
 // init opens the database connection
-module.exports.init = function(db_driver) {
+module.exports.init = function(dbDriver) {
     return new Promise((resolve, reject) => {
         if (db){
             console.warn("Trying to init DB again.");
@@ -14,7 +14,7 @@ module.exports.init = function(db_driver) {
         resolve();
     }).then(() => {
         new Promise((resolve, reject) => {
-            switch(db_driver){
+            switch(dbDriver){
             case 'pg':
                 driver = 'pg';
                 db = new Client({

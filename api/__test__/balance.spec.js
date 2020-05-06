@@ -2,7 +2,8 @@ const request = require('supertest');
 const server = require('../server');
 const db = require('../../store/db');
 const migrations = require('../../internal/migrations');
-const transactionStore = require('../../store/transaction')
+const transactionStore = require('../../store/transaction');
+process.env.DISABLE_AUTH=true;
 
 describe("GET /balance", function(){
 
