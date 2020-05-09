@@ -29,6 +29,7 @@ help(){
     play      runs a target composition service
     stop      stops a target composition service
     conduct   builds and runs all composition services
+    logs      get target composition service's log
 
     EXAMPLES
 
@@ -80,7 +81,7 @@ docker_compose_exec() {
     local _container=$2
     local _command=$3
 
-    # show message
+    # debug message
     # echo "running: docker exec" "${_flags}" "${_container} ${_command}"
 
     # execute the commmand
@@ -125,13 +126,16 @@ parse_opts(){
             # build a service
             build) shift 1; _action="build"; _flags="--no-cache" ;;
 
-            # plays a tune (ups a service)
+            # up a service
             play) shift 1; _action="up"; _flags="-d" ;;
 
-            # stops a tune|service
+            # stops a service
             stop) shift 1; _action="stop"; _flags="-t 5" ;;
 
-            # plays all tunes (ups all services in the composition)
+            # get a service's logs
+            logs) shift 1; _action="logs"; _flags="-f" ;;
+
+            # ups all services in the composition
             -c|conduct) conduct ;;
 
         esac
