@@ -1,5 +1,5 @@
 # CC API
-An example API using Node.JS, Docker/Docker-compose, Swagger, PostgreSQL and  testing with Jest.
+An extremely simple transaction based API using Node.JS, Docker/Docker-compose, Swagger, PostgreSQL and  testing with Jest.
 
 # Building
 
